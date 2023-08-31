@@ -4,5 +4,6 @@ const router = express.Router();
 const recipeController = require("../controllers/recipeController");
 
 router.get("/", recipeController.homepage);
+router.get("/categories", recipeController.categoryPage);
 
 module.exports = router;
