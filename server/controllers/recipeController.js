@@ -8,9 +8,23 @@ exports.homepage = async (req, res) => {
   try {
     const categoryLimit = 5;
     const categories = await categoryModel.find({}).limit(categoryLimit);
+    const latestRecipes = await recipeModel
+      .find({})
+      .sort({ _id: -1 })
+      .limit(categoryLimit);
 
-    res.render("index", { title: "epiceats - Home", categories });
-  } catch (error) {}
+    const indianRecipes = await recipeModel.find({ category: "Indian" });
+
+    const americanRecipes = await recipeModel.find({ category: "American" });
+
+    const thaiRecipes = await recipeModel.find({ category: "Thai" });
+
+    const food = { latestRecipes, indianRecipes, thaiRecipes, americanRecipes };
+
+    res.render("index", { title: "epiceats - Home", categories, food });
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 /**
@@ -23,7 +37,96 @@ exports.categoryPage = async (req, res) => {
     const categories = await categoryModel.find({}).limit(categoryLimit);
 
     res.render("categories", { title: "epiceats - Categories", categories });
-  } catch (error) {}
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+/**
+ * GET /categories/:id
+ * Categories
+ */
+exports.exploreCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    const categoryLimit = 20;
+    const category = await recipeModel
+      .find({ category: categoryId })
+      .limit(categoryLimit);
+
+    res.render("categories", {
+      title: `epiceats - ${categoryId}`,
+      categoryId,
+      category,
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+/**
+ * GET /recipe/:id
+ * recipe
+ */
+exports.recipePage = async (req, res) => {
+  try {
+    const recipeId = req.params.id;
+    const recipe = await recipeModel.findById(recipeId);
+
+    res.render("recipe", { title: "epiceats - Recipe", recipe });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+/**
+ * GET /explore-latest
+ * explore Latest Category
+ */
+exports.exploreCategoryLatest = async (req, res) => {
+  try {
+    const recipeLimit = 20;
+    const recipes = await recipeModel
+      .find({})
+      .sort({ _id: -1 })
+      .limit(recipeLimit);
+
+    res.render("exploreLatest", {
+      title: "epiceats - Explore latest",
+      recipes,
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+/**
+ * Post /search
+ * searchRecipes
+ */
+exports.searchRecipes = async (req, res) => {
+  try {
+    const searchContext = req.body.searchTerm;
+    const recipes = await recipeModel.find({
+      $text: { $search: searchContext, $diacriticSensitive: true },
+    });
+
+    res.render("search", { title: "epiceats - Search", recipes });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+/**
+ * Post /submit-recipe
+ * submitRecipe
+ */
+exports.submitRecipe = async (req, res) => {
+  try {
+    res.render("submitRecipe", { title: "epiceats - Submit recipe" });
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 /** create category manually */
@@ -67,8 +170,248 @@ async function insertCategoryData() {
 */
 
 /** create recipes manually */
-/*
+/** 
 const recipes = [
+  {
+    name: "Savory Chicken Delight",
+    description:
+      "Indulge in the rich flavors of Savory Chicken Delight, a classic dish that combines tender chicken, aromatic herbs, and a touch of garlic. Perfect for a hearty meal with loved ones.",
+    email: "chicken.delight@example.com",
+    ingredients: [
+      "Chicken breast",
+      "Rosemary",
+      "Thyme",
+      "Garlic",
+      "Olive oil",
+      "Salt",
+      "Pepper",
+    ],
+    category: "American",
+    image: "chicken_delight.jpg",
+  },
+  {
+    name: "Classic American Burger",
+    description:
+      "Sink your teeth into the Classic American Burger, a timeless favorite featuring a juicy beef patty, melted cheese, crisp lettuce, and tangy ketchup. A satisfying delight for all ages.",
+    email: "burger@example.com",
+    ingredients: [
+      "Beef patty",
+      "Cheddar cheese",
+      "Lettuce",
+      "Tomato",
+      "Ketchup",
+      "Burger bun",
+      "Onion rings",
+    ],
+    category: "American",
+    image: "classic_burger.jpg",
+  },
+  {
+    name: "American BBQ Ribs",
+    description:
+      "Savor the finger-licking goodness of American BBQ Ribs, slow-cooked to perfection and smothered in a smoky-sweet sauce. A crowd-pleasing dish for gatherings and celebrations.",
+    email: "bbq.ribs@example.com",
+    ingredients: [
+      "Pork ribs",
+      "BBQ sauce",
+      "Brown sugar",
+      "Paprika",
+      "Garlic powder",
+      "Onion powder",
+      "Cayenne pepper",
+    ],
+    category: "American",
+    image: "american_bbq_ribs.jpg",
+  },
+  {
+    name: "Thai Green Curry Bliss",
+    description:
+      "Experience the culinary magic of Thai Green Curry Bliss, a fragrant dish that brings together succulent prawns, vibrant vegetables, and a luscious coconut milk base.",
+    email: "green.curry.bliss@example.com",
+    ingredients: [
+      "Prawns",
+      "Coconut milk",
+      "Thai green curry paste",
+      "Bell peppers",
+      "Zucchini",
+      "Basil leaves",
+      "Jasmine rice",
+    ],
+    category: "Thai",
+    image: "green_curry_bliss.jpg",
+  },
+  {
+    name: "Pad Thai Sensation",
+    description:
+      "Indulge in the iconic flavors of Pad Thai Sensation, a delectable Thai street food dish featuring stir-fried rice noodles, succulent shrimp, tofu, and crushed peanuts.",
+    email: "pad.thai@example.com",
+    ingredients: [
+      "Rice noodles",
+      "Shrimp",
+      "Tofu",
+      "Eggs",
+      "Bean sprouts",
+      "Tamarind sauce",
+      "Lime wedges",
+    ],
+    category: "Thai",
+    image: "pad_thai_sensation.jpg",
+  },
+  {
+    name: "Thai Mango Sticky Rice",
+    description:
+      "Satisfy your sweet cravings with Thai Mango Sticky Rice, a delightful dessert featuring glutinous rice, ripe mango slices, and a drizzle of sweet coconut sauce.",
+    email: "mango.sticky.rice@example.com",
+    ingredients: [
+      "Glutinous rice",
+      "Ripe mango",
+      "Coconut milk",
+      "Sugar",
+      "Salt",
+      "Sesame seeds",
+      "Coconut flakes",
+    ],
+    category: "Thai",
+    image: "thai_mango_sticky_rice.jpg",
+  },
+  {
+    name: "Sizzling Szechuan Stir-Fry",
+    description:
+      "Ignite your taste buds with the Sizzling Szechuan Stir-Fry, a fiery Chinese dish featuring tender beef, colorful bell peppers, and a bold Szechuan sauce.",
+    email: "szechuan.stirfry@example.com",
+    ingredients: [
+      "Beef sirloin",
+      "Bell peppers",
+      "Broccoli florets",
+      "Szechuan sauce",
+      "Soy sauce",
+      "Garlic",
+      "Ginger",
+    ],
+    category: "Chinese",
+    image: "szechuan_stirfry.jpg",
+  },
+  {
+    name: "Chinese Dumplings (Jiaozi)",
+    description:
+      "Delight in the taste of Chinese Dumplings (Jiaozi), handmade parcels filled with a flavorful mixture of pork, vegetables, and spices, steamed to perfection.",
+    email: "chinese.dumplings@example.com",
+    ingredients: [
+      "Ground pork",
+      "Napa cabbage",
+      "Ginger",
+      "Green onions",
+      "Soy sauce",
+      "Sesame oil",
+      "Dumpling wrappers",
+    ],
+    category: "Chinese",
+    image: "chinese_dumplings.jpg",
+  },
+  {
+    name: "Mexican Street Tacos",
+    description:
+      "Embark on a flavorful journey with Mexican Street Tacos, small soft corn tortillas filled with seasoned meats, fresh salsa, and a burst of lime. A fiesta of taste in every bite.",
+    email: "mexican.tacos@example.com",
+    ingredients: [
+      "Marinated beef",
+      "Corn tortillas",
+      "Onions",
+      "Cilantro",
+      "Salsa",
+      "Lime wedges",
+      "Avocado",
+    ],
+    category: "Mexican",
+    image: "mexican_street_tacos.jpg",
+  },
+  {
+    name: "Authentic Mexican Guacamole",
+    description:
+      "Dive into the rich and creamy goodness of Authentic Mexican Guacamole, a vibrant dip made from ripe avocados, diced tomatoes, onions, and a hint of lime.",
+    email: "mexican.guacamole@example.com",
+    ingredients: [
+      "Ripe avocados",
+      "Tomatoes",
+      "Onion",
+      "Lime juice",
+      "Cilantro",
+      "Jalapeño",
+      "Garlic",
+    ],
+    category: "Mexican",
+    image: "mexican_guacamole.jpg",
+  },
+  {
+    name: "Spanish Paella Fiesta",
+    description:
+      "Celebrate with the Spanish Paella Fiesta, a vibrant dish showcasing saffron-infused rice, succulent shrimp, and a medley of seafood and vegetables.",
+    email: "paella@example.com",
+    ingredients: [
+      "Arborio rice",
+      "Shrimp",
+      "Mussels",
+      "Chicken drumsticks",
+      "Bell peppers",
+      "Saffron threads",
+      "Peas",
+    ],
+    category: "Spanish",
+    image: "spanish_paella.jpg",
+  },
+  {
+    name: "Spanish Tapas Platter",
+    description:
+      "Transport your taste buds to Spain with the Spanish Tapas Platter, a delightful assortment of small dishes, including chorizo, olives, and grilled vegetables. Perfect for sharing.",
+    email: "spanish.tapas@example.com",
+    ingredients: [
+      "Chorizo",
+      "Manchego cheese",
+      "Green olives",
+      "Red peppers",
+      "Artichoke hearts",
+      "Garlic",
+      "Olive oil",
+    ],
+    category: "Spanish",
+    image: "spanish_tapas_platter.jpg",
+  },
+  {
+    name: "Aromatic Indian Biryani",
+    description:
+      "Delight in the Aromatic Indian Biryani, a fragrant rice dish featuring tender lamb, fragrant spices, and caramelized onions. A true culinary journey to India.",
+    email: "indian.biryani@example.com",
+    ingredients: [
+      "Lamb shoulder",
+      "Basmati rice",
+      "Onions",
+      "Yogurt",
+      "Garam masala",
+      "Saffron milk",
+      "Cashews",
+    ],
+    category: "Indian",
+    image: "indian_biryani.jpg",
+  },
+  {
+    name: "Indian Butter Chicken",
+    description:
+      "Experience the creamy delight of Indian Butter Chicken, succulent pieces of chicken simmered in a rich tomato and butter sauce, with a touch of aromatic spices.",
+    email: "indian.butter.chicken@example.com",
+    ingredients: [
+      "Chicken thighs",
+      "Tomato puree",
+      "Butter",
+      "Cream",
+      "Ginger",
+      "Garlic",
+      "Kasuri methi",
+    ],
+    category: "Indian",
+    image: "indian_butter_chicken.jpg",
+  },
+];
+const recipes1 = [
   {
     name: "Spicy Curry Delight",
     description:
