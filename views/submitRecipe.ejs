@@ -10,6 +10,13 @@
 
 <div class="row justify-content-center">
   <div class="col-8">
+    <% if (infoSuccessMessage != '') {%>
+    <div class="alert alert-success" role="alert">
+      <%- infoSuccessMessage %>
+    </div>
+    <% } %> <% if (infoFailureMessage != '') {%>
+    <div class="alert alert-danger" role="alert"><%- infoFailureMessage %></div>
+    <% } %>
     <form action="/submit-recipe" enctype="multipart/form-data" method="POST">
       <div class="row g-3">
         <div class="col-12">
@@ -19,13 +26,7 @@
 
         <div class="col-12">
           <label for="name" class="form-label">Recipe Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            class="form-control"
-            required
-          />
+          <input type="text" name="name" id="name" class="form-control" />
         </div>
 
         <div class="col-12">
@@ -40,10 +41,10 @@
         </div>
 
         <div class="col-12">
-          <label for="name" class="form-label">Ingredients</label><br />
+          <label for="ingredients" class="form-label">Ingredients</label><br />
           <small>Example: Ice</small>
           <div class="ingredientList">
-            <div class="ingredeintDiv mb-1">
+            <div class="ingredientDiv mb-1">
               <input type="text" name="ingredients" class="form-control" />
             </div>
           </div>
