@@ -9,6 +9,7 @@ router.get("/categories", recipeController.categoryPage);
 router.get("/categories/:id", recipeController.exploreCategory);
 router.get("/explore-latest", recipeController.exploreCategoryLatest);
 router.post("/search", recipeController.searchRecipes);
-router.get("/submit-recipe", recipeController.submitRecipe);
+router.get("/submit-recipe", recipeController.recipeSubmitPage);
+router.post("/submit-recipe", recipeController.submitRecipe);
 
 module.exports = router;

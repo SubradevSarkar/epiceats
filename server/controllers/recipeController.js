@@ -90,7 +90,6 @@ exports.exploreCategoryLatest = async (req, res) => {
       .find({})
       .sort({ _id: -1 })
       .limit(recipeLimit);
-
     res.render("exploreLatest", {
       title: "epiceats - Explore latest",
       recipes,
@@ -118,13 +117,61 @@ exports.searchRecipes = async (req, res) => {
 };
 
 /**
+ * get /submit-recipe
+ * submitRecipe
+ */
+exports.recipeSubmitPage = async (req, res) => {
+  try {
+    const infoSuccessMessage = req.flash("infoSuccess");
+    const infoFailureMessage = req.flash("infoFailure");
+    res.render("submitRecipe", {
+      title: "epiceats - Submit recipe",
+      infoSuccessMessage,
+      infoFailureMessage,
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+/**
  * Post /submit-recipe
  * submitRecipe
  */
 exports.submitRecipe = async (req, res) => {
   try {
-    res.render("submitRecipe", { title: "epiceats - Submit recipe" });
+    let imageUploadFile;
+    let uploadPath;
+    let newImageName;
+
+    if (!req.files || Object.keys(req.files).length === 0) {
+    } else {
+      imageUploadFile = req.files.image;
+      newImageName = Date.now() + imageUploadFile.name;
+
+      uploadPath =
+        require("path").resolve("./") + "/public/uploads/" + newImageName;
+
+      imageUploadFile.mv(uploadPath, (err) => {
+        if (err) return res.status(500).send(err);
+      });
+    }
+
+    const body = req.body;
+    const recipeData = {
+      email: body.email,
+      name: body.name,
+      description: body.description,
+      ingredients: body.ingredients,
+      category: body.category,
+      image: newImageName,
+    };
+
+    await recipeModel.create(recipeData);
+    req.flash("infoSuccess", "Recipe submitted successfully");
+    res.redirect("/submit-recipe");
   } catch (error) {
+    req.flash("infoFailure", error.message);
     throw new Error(error.message);
   }
 };
