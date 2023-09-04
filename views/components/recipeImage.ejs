@@ -1,0 +1,18 @@
+<div class="category_img category_img--large shadow">
+  <% if(!recipe.image || recipe.image === '' ||
+  !recipe.image.includes('firebasestorage')){%>
+  <img
+    src="img/default.png"
+    class="img-fluid sticky-top"
+    loading="lazy"
+    alt=""
+  />
+  <% } else {%>
+  <img
+    src="<%- recipe.image%>"
+    class="img-fluid sticky-top"
+    loading="lazy"
+    alt=""
+  />
+  <% } %>
+</div>
