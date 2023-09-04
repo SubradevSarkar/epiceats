@@ -1,0 +1,50 @@
+<h1>Contact us</h1>
+<div class="px-4 py-5 my-5 text-center">
+  <h1 class="display-5 fw-bold">We'd Love to Hear From You!</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead">
+      Got a question, a suggestion, or simply want to connect with us? We'd love
+      to hear from you! At Epiceats, we value your feedback, and our dedicated
+      team is here to assist you.
+    </p>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-8">
+    <% if (infoSuccessMessage != '') {%>
+    <div class="alert alert-success" role="alert">
+      <%- infoSuccessMessage %>
+    </div>
+    <% } %> <% if (infoFailureMessage != '') {%>
+    <div class="alert alert-danger" role="alert"><%- infoFailureMessage %></div>
+    <% } %>
+    <form action="/contact-submit" method="POST">
+      <div class="row g-3">
+        <div class="col-12">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" name="name" id="name" class="form-control" />
+        </div>
+        <div class="col-12">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" name="email" id="email" class="form-control" />
+        </div>
+
+        <div class="col-12">
+          <label for="question" class="form-label">Question / Suggestion</label>
+          <textarea
+            name="question"
+            id="question"
+            class="form-control"
+            cols="30"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-dark">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

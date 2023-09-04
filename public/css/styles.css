@@ -2,13 +2,18 @@
   --bs-font-sans-serif: "Bricolage Grotesque", sans-serif;
 }
 
+html {
+  height: 100%;
+}
+
+footer {
+  margin-top: auto;
+}
 .container-xxl {
   max-width: 1530px;
 }
 
 body {
-  /* background-image: url("/img/bgs.svg");
-  background-color: antiquewhite; */
 }
 
 a {

@@ -1,5 +1,7 @@
 const categoryModel = require("../models/CategoryModel");
 const recipeModel = require("../models/RecipeModel");
+const uploadImage = require("../config/firebaseConfig");
+const contactModel = require("../models/ContactModel");
 /**
  * GET /
  * homepage
@@ -80,6 +82,18 @@ exports.recipePage = async (req, res) => {
 };
 
 /**
+ * GET /about
+ * recipe
+ */
+exports.aboutPage = async (req, res) => {
+  try {
+    res.render("about", { title: "epiceats - About" });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+/**
  * GET /explore-latest
  * explore Latest Category
  */
@@ -140,21 +154,12 @@ exports.recipeSubmitPage = async (req, res) => {
  */
 exports.submitRecipe = async (req, res) => {
   try {
-    let imageUploadFile;
-    let uploadPath;
-    let newImageName;
+    let imageUrl;
 
     if (!req.files || Object.keys(req.files).length === 0) {
+      imageUrl = await uploadImage(req);
     } else {
-      imageUploadFile = req.files.image;
-      newImageName = Date.now() + imageUploadFile.name;
-
-      uploadPath =
-        require("path").resolve("./") + "/public/uploads/" + newImageName;
-
-      imageUploadFile.mv(uploadPath, (err) => {
-        if (err) return res.status(500).send(err);
-      });
+      throw new Error("choose image to upload");
     }
 
     const body = req.body;
@@ -164,12 +169,52 @@ exports.submitRecipe = async (req, res) => {
       description: body.description,
       ingredients: body.ingredients,
       category: body.category,
-      image: newImageName,
+      image: imageUrl,
     };
 
     await recipeModel.create(recipeData);
     req.flash("infoSuccess", "Recipe submitted successfully");
     res.redirect("/submit-recipe");
+  } catch (error) {
+    req.flash("infoFailure", error.message);
+    throw new Error(error.message);
+  }
+};
+
+/**
+ * get /contact-submit
+ * contact page
+ */
+exports.contactPage = async (req, res) => {
+  try {
+    const infoSuccessMessage = req.flash("infoSuccess");
+    const infoFailureMessage = req.flash("infoFailure");
+    res.render("contact", {
+      title: "epiceats - contact us",
+      infoSuccessMessage,
+      infoFailureMessage,
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+/**
+ * Post /contact-submit
+ * contact submit
+ */
+exports.contactSubmitPage = async (req, res) => {
+  try {
+    const body = req.body;
+    const questionData = {
+      name: body.name,
+      email: body.email,
+      question: body.question,
+    };
+
+    await contactModel.create(questionData);
+    req.flash("infoSuccess", "Thank you for contacting us");
+    res.redirect("/contact-submit");
   } catch (error) {
     req.flash("infoFailure", error.message);
     throw new Error(error.message);
