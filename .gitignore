@@ -1,6 +1,7 @@
 # Dependency directories
 node_modules/
 jspm_packages/
+package-lock.json
 data.txt
 
 # Coverage directory used by tools like istanbul
