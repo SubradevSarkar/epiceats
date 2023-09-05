@@ -201,7 +201,7 @@ exports.contactPage = async (req, res) => {
 
 /**
  * Post /contact-submit
- * contact submit
+ * contact submit form
  */
 exports.contactSubmitPage = async (req, res) => {
   try {
