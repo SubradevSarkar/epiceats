@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 connectDB();
 
 app.use(express.urlencoded({ extended: true }));
@@ -33,6 +33,9 @@ app.set("view engine", "ejs");
 const routes = require("./server/routes/recipeRoutes.js");
 app.use("/", routes);
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+//Connect to the database before listening
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log("listening for requests");
+  });
 });
