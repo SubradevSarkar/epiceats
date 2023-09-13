@@ -177,7 +177,7 @@ exports.submitRecipe = async (req, res) => {
     res.redirect("/submit-recipe");
   } catch (error) {
     req.flash("infoFailure", error.message);
-    throw new Error(error.message);
+    res.redirect("/submit-recipe");
   }
 };
 
