@@ -13,11 +13,32 @@ footer {
   max-width: 1530px;
 }
 
-body {
-}
-
 a {
   color: var(--bs-dark);
+}
+
+.border-error {
+  border: 1px solid red !important;
+  box-shadow: 0 0 0 0.21rem #fec2c2 !important;
+}
+
+.btn-res {
+  --bs-btn-font-weight: 500;
+  --bs-btn-color: #ffffff;
+  --bs-btn-bg: #f8663a;
+  --bs-btn-border-color: #f8663a;
+  --bs-btn-border-radius: 0.5rem;
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-hover-bg: #d84d23;
+  --bs-btn-hover-border-color: #d84d23;
+  --bs-btn-focus-shadow-rgb: #f8663a;
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #f8663a;
+  --bs-btn-active-border-color: #f8663a;
+}
+
+.log-form {
+  max-width: 30rem;
 }
 
 .smb-btn {
