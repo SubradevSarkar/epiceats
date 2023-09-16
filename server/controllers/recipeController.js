@@ -2,6 +2,7 @@ const categoryModel = require("../models/CategoryModel");
 const recipeModel = require("../models/RecipeModel");
 const uploadImage = require("../config/firebaseConfig");
 const contactModel = require("../models/ContactModel");
+
 /**
  * GET /
  * homepage
@@ -22,7 +23,6 @@ exports.homepage = async (req, res) => {
     const thaiRecipes = await recipeModel.find({ category: "Thai" });
 
     const food = { latestRecipes, indianRecipes, thaiRecipes, americanRecipes };
-
     res.render("index", { title: "epiceats - Home", categories, food });
   } catch (error) {
     throw new Error(error.message);
@@ -177,7 +177,7 @@ exports.submitRecipe = async (req, res) => {
     res.redirect("/submit-recipe");
   } catch (error) {
     req.flash("infoFailure", error.message);
-    throw new Error(error.message);
+    res.redirect("/submit-recipe");
   }
 };
 
