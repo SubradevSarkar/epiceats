@@ -1,0 +1,141 @@
+<div class="px-4 py-5 my-5 text-center">
+  <h1 class="display-5 fw-bold">Join the Culinary Adventure!</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead">Create Your Account and Get Cooking</p>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-9 log-form">
+    <div
+      class="alert alert-danger"
+      id="reg-alert"
+      style="display: none"
+      role="alert"
+    >
+      This is a danger alert—check it out!
+    </div>
+    <% if (infoSuccessMessage != '') {%>
+    <div class="alert alert-success" role="alert">
+      <%- infoSuccessMessage %>
+    </div>
+    <% } %> <% if (infoFailureMessage != '') {%>
+    <div class="alert alert-danger" role="alert"><%- infoFailureMessage %></div>
+    <% } %> <% if(step ===1){ %>
+    <form id="reg-form" action="/user/register" method="POST">
+      <div class="row g-3">
+        <div class="col-12">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="reg-username"
+            required
+            class="form-control"
+          />
+          <p>
+            <small style="font-size: 0.8rem; color: #757575"
+              >special characters like @, #, $, %, etc. not allowed</small
+            >
+          </p>
+        </div>
+        <div class="col-12">
+          <label for="fname" class="form-label">First name</label>
+          <input
+            type="text"
+            name="fname"
+            id="reg-fname"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="col-12">
+          <label for="lname" class="form-label">Last name</label>
+          <input
+            type="text"
+            name="lname"
+            id="reg-lname"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="col-12">
+          <label for="email" class="form-label">email</label>
+          <input
+            type="email"
+            name="email"
+            id="reg-email"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="col-12">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="reg-password"
+            required
+            class="form-control"
+          />
+          <p>
+            <small style="font-size: 0.8rem; color: #757575"
+              >limit min:8 characters</small
+            >
+          </p>
+        </div>
+        <div class="col-12">
+          <label for="conPassword" class="form-label">Confirm Password</label>
+          <input
+            type="password"
+            name="conPassword"
+            id="reg-conPassword"
+            required
+            class="form-control"
+          />
+        </div>
+
+        <div class="mt-4">
+          <button type="submit" class="col-12 mb-2 btn btn-res btn-lg px-4">
+            Register
+          </button>
+        </div>
+        <p>
+          already have an account?
+          <span><a href="/user/login" class="fw-bold">Log in</a></span>
+        </p>
+      </div>
+    </form>
+    <% } %> <% if(step ===2){ %>
+    <form id="reg-form" action="/user/otp-register" method="POST">
+      <div class="row g-3">
+        <p>
+          <b>Verify your Email</b><br /><br />Enter the one-time password sent
+          to your email <br /><span
+            class="fw-bold"
+            style="color: rgb(78, 132, 248)"
+            ><%- email %></span
+          >
+        </p>
+        <div class="col-12">
+          <label for="otp" class="form-label">OTP</label>
+          <input
+            type="text"
+            name="otp"
+            id="reg-otp"
+            required
+            class="form-control"
+            placeholder="Enter OTP"
+          />
+        </div>
+
+        <div class="mt-4">
+          <button type="submit" class="col-12 mb-2 btn btn-res btn-lg px-4">
+            Verify
+          </button>
+        </div>
+      </div>
+    </form>
+    <% } %>
+  </div>
+</div>

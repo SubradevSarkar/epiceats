@@ -36,7 +36,18 @@
         >
           <img src="/img/eplogo.svg" height="68" alt="eapiceats-logo" />
         </a>
-
+        <!-- <div class="col-md-3 text-end"> -->
+        <div class="col-12 col-md-3 md-md-0 mb-2 text-end">
+          <form method="POST" action="/search">
+            <input
+              type="search"
+              name="searchTerm"
+              class="form-control"
+              placeholder="Search..."
+              aria-label="Search"
+            />
+          </form>
+        </div>
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center md-md-0">
           <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
           <li>
@@ -52,19 +63,10 @@
               >Contact</a
             >
           </li>
+          <li>
+            <a href="/user/login" class="nav-link px-2 link-secondary">Login</a>
+          </li>
         </ul>
-
-        <div class="col-md-3 text-end">
-          <form method="POST" action="/search">
-            <input
-              type="search"
-              name="searchTerm"
-              class="form-control"
-              placeholder="Search..."
-              aria-label="Search"
-            />
-          </form>
-        </div>
       </header>
       <main><%- body -%></main>
 
@@ -84,5 +86,6 @@
       crossorigin="anonymous"
     ></script>
     <script src="/js/script.js"></script>
+    <script defer src="/js/forms.js"></script>
   </body>
 </html>
