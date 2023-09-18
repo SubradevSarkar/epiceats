@@ -1,92 +1,32 @@
 // Wait for the DOM to be fully loaded before attaching event listeners
 document.addEventListener("DOMContentLoaded", () => {
-  let username = document.getElementById("reg-username");
-  let firstName = document.getElementById("reg-fname");
-  let lastName = document.getElementById("reg-lname");
-  let email = document.getElementById("reg-email");
-  let passwordField = document.getElementById("reg-password");
-  let confirmPasswordField = document.getElementById("reg-conPassword");
-  let errorAlert = document.getElementById("reg-alert");
+  const elementId = (id) => document.getElementById(id);
+  let userNameField = elementId("reg-userName");
+  let firstNameField = elementId("reg-firstName");
+  let lastNameField = elementId("reg-lastName");
+  let emailField = elementId("reg-email");
+  let passwordField = elementId("reg-password");
+  let confirmPasswordField = elementId("reg-conPassword");
+  let errorAlert = elementId("reg-alert");
+  let otpResendField = elementId("reg-otpbtn");
+  let otpTimeField = elementId("reg-otpcontent");
+  let otpTimeCountField = elementId("reg-otptime");
   let confirmPassword = "";
   let password = "";
 
-  const registerForm = document.getElementById("reg-form");
+  const url = window.location.origin;
+  const query = window.location.search.split("=")[1];
+  if (query == 2) {
+    otpCount();
+  }
+
+  let registerForm = elementId("reg-form");
   registerForm.addEventListener("submit", (event) => {
-    if (!validateRegistrationForm()) {
-      event.preventDefault(); // Prevent form submission if validation fails
+    event.preventDefault(); // Prevent form submission if validation fails
+    if (validateForm()) {
+      registerForm.submit();
     }
   });
-
-  function validateRegistrationForm() {
-    username = username.value;
-    firstName = firstName.value;
-    lastName = lastName.value;
-    email = email.value;
-    // Regular expression to check for special characters in the username
-    const usernamePattern = /^[a-zA-Z0-9]+$/;
-    // Regular expression to validate email format
-    const emailPattern = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
-
-    // Validation flags for each field
-    let isValid = true;
-    let errorMessage = "";
-
-    // // Validate Username
-    // if (username === "") {
-    //   isValid = false;
-    //   errorMessage += "Username is required.\n";
-    // } else if (!usernamePattern.test(username)) {
-    //   isValid = false;
-    //   errorMessage += "Username should not contain special characters.\n";
-    // }
-
-    // Validate First Name
-    if (firstName === "") {
-      isValid = false;
-      errorMessage += "First Name is required.\n";
-    }
-
-    // Validate Last Name
-    if (lastName === "") {
-      isValid = false;
-      errorMessage += "Last Name is required.\n";
-    }
-
-    // Validate Email
-    if (email === "") {
-      isValid = false;
-      errorMessage += "Email is required.\n";
-    } else if (!emailPattern.test(email)) {
-      isValid = false;
-      errorMessage += "Email is not valid.\n";
-    }
-
-    // Validate Password
-    if (password === "") {
-      isValid = false;
-      errorMessage += "Password is required.\n";
-    } else if (password.length < 8) {
-      isValid = false;
-      errorMessage += "Password should be at least 8 characters long.\n";
-    }
-
-    // Confirm Password validation
-    if (confirmPassword === "") {
-      isValid = false;
-      errorMessage += "Confirm Password is required.\n";
-    } else if (password !== confirmPassword) {
-      isValid = false;
-      errorMessage += "Passwords do not match.\n";
-    }
-
-    // Display error message if any field is invalid
-    if (!isValid) {
-      errorAlert.innerText = errorMessage;
-      errorAlert.style.display = "block";
-    }
-
-    return isValid;
-  }
 
   confirmPasswordField.addEventListener("input", () => {
     confirmPassword = confirmPasswordField.value;
@@ -101,4 +41,67 @@ document.addEventListener("DOMContentLoaded", () => {
       confirmPasswordField.classList.remove("border-error");
     }
   });
+
+  passwordField.addEventListener("input", () => {
+    // confirmPassword = confirmPasswordField.value;
+    password = passwordField.value;
+
+    // Check if the passwords match
+    const passwordsMatch = confirmPassword === password;
+
+    if (!!confirmPassword && !passwordsMatch) {
+      confirmPasswordField.classList.add("border-error");
+    } else {
+      confirmPasswordField.classList.remove("border-error");
+    }
+  });
+
+  function validateForm() {
+    const userData = {
+      userName: userNameField.value,
+      firstName: firstNameField.value,
+      lastName: lastNameField.value,
+      email: emailField.value,
+      password,
+      confirmPassword,
+    };
+
+    const { isValid, errorMessage } = validateRegistrationForm(userData);
+
+    // Display error message if any field is invalid
+    if (!isValid) {
+      errorAlert.innerText = errorMessage;
+      errorAlert.style.display = "block";
+    }
+
+    return isValid;
+  }
+
+  function otpCount() {
+    let limit = 10;
+
+    let interval = setInterval(otpCountDown, 1000);
+    function otpCountDown() {
+      otpTimeCountField.innerHTML = limit;
+      if (limit < 1) {
+        clearInterval(interval);
+        otpTimeField.innerHTML = "OTP";
+        otpResendField.style.cursor = "pointer";
+        otpResendField.addEventListener("click", resendOtp);
+      }
+      limit--;
+    }
+  }
+
+  async function resendOtp() {
+    const response = await fetch(`${url}/user/otp-resend`, {
+      method: "POST",
+    });
+    const content = await response.json();
+    if (content) {
+      console.log(content);
+      otpCount();
+      console.log("first");
+    }
+  }
 });

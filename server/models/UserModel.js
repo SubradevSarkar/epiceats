@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const otpExpiryLimit = process.env.OTP_EXPIRE_LIMIT;
 
 const userSchema = new mongoose.Schema(
@@ -31,6 +31,12 @@ const userSchema = new mongoose.Schema(
       required: true,
       enum: ["email", "google"],
     },
+    role: {
+      type: String,
+      required: true,
+      default: "user",
+      enum: ["admin", "user", "moderator"],
+    },
     verificationCode: {
       code: { type: Number },
       createdAt: { type: Date, default: Date.now() },
@@ -57,4 +63,4 @@ const userModel = mongoose.model("user", userSchema);
 
 // userModel.createIndexes();
 
-module.exports = userModel;
+export default userModel;

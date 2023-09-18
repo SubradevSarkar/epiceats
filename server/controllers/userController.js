@@ -1,26 +1,88 @@
-const url = require("url");
-const validateRegistrationForm = require("../utils/regFormValidation");
-const { generateToken } = require("../utils/manageToken");
-const { encryptPassword } = require("../utils/managePassword");
-const { genOtp } = require("../utils/manageOtp");
-const { sendEmail } = require("../utils/manageEmail");
-const userModel = require("../models/UserModel");
+import url from "url";
+import {
+  validateRegistrationForm,
+  validateLoginForm,
+} from "../utils/manageFormValidation.js";
+import { generateToken, verifyToken } from "../utils/manageToken.js";
+import { encryptPassword, matchPassword } from "../utils/managePassword.js";
+import { genOtp, isOtpExpire } from "../utils/manageOtp.js";
+import { sendEmail } from "../utils/manageEmail.js";
+import userModel from "../models/UserModel.js";
 
-exports.loginPage = async (req, res) => {
-  res.render("login");
+/**
+ * GET /user/login
+ * LoginPage
+ */
+const loginPage = async (req, res) => {
+  try {
+    const infoSuccessMessage = req.flash("infoSuccess");
+    const infoFailureMessage = req.flash("infoFailure");
+
+    res.render("login", { infoSuccessMessage, infoFailureMessage });
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
-exports.login = async () => {};
+/**
+ * POST /user/login
+ * Login
+ */
+const login = async (req, res) => {
+  try {
+    const { userName, password } = req.body;
+    const searchTerm = userName.includes("@")
+      ? { email: userName }
+      : { userName };
+
+    const { isValid, errorMessage } = validateLoginForm({ userName, password });
+    if (!isValid) {
+      throw new Error(errorMessage);
+    }
+
+    const user = await userModel.findOne(searchTerm);
+    if (!user) {
+      throw new Error("Invalid username or password");
+    }
+
+    if (!matchPassword(password, user.password)) {
+      throw new Error("Invalid username or password");
+    }
+
+    await generateToken(user, res);
+    res.redirect("/");
+  } catch (error) {
+    req.flash("infoFailure", error.message);
+  }
+};
+
+/**
+ * POST /user/logout
+ * Logout
+ */
+const logout = async (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.redirect("/");
+};
 
 /**
  * GET /user/register
  * Register
  */
-exports.registerPage = async (req, res) => {
+const registrationPage = async (req, res) => {
   try {
     let step = req.query.step;
+    let email = "";
     step = !step ? 1 : Number(step);
-    const email = step === 2 ? req.session.data["email"] : "";
+
+    if (step === 2) {
+      let decode = await verifyToken(req.cookies.jwt);
+      email = decode.email ? decode.email : "";
+    }
     const infoSuccessMessage = req.flash("infoSuccess");
     const infoFailureMessage = req.flash("infoFailure");
 
@@ -40,12 +102,12 @@ exports.registerPage = async (req, res) => {
  * POST /user/register
  * Register
  */
-exports.register = async (req, res) => {
+const registration = async (req, res) => {
   try {
     const userData = {
-      userName: req.body.username,
-      firstName: req.body.fname,
-      lastName: req.body.lname,
+      userName: req.body.userName,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       email: req.body.email,
       password: req.body.password,
       confirmPassword: req.body.conPassword,
@@ -72,13 +134,12 @@ exports.register = async (req, res) => {
     const user = await userModel.create(userData);
     if (user) {
       await generateToken(user, res);
-      req.session.data = { email: user.email };
-      await sendEmail({
-        email: user.email,
-        context: `HI ${user.firstName}
-        here is your one-time password
-        ${user.verificationCode.code}`,
-      });
+      // await sendEmail({
+      //   email: user.email,
+      //   context: `HI ${user.firstName}
+      //   here is your one-time password
+      //   ${user.verificationCode.code}`,
+      // });
       req.flash("infoSuccess", "Check your email for OTP confirmation!");
       res.redirect(
         url.format({
@@ -92,7 +153,7 @@ exports.register = async (req, res) => {
     }
   } catch (error) {
     req.flash("infoFailure", error.message);
-    res.redirect("/user/register");
+    // res.redirect("/user/register");
   }
 };
 
@@ -100,14 +161,12 @@ exports.register = async (req, res) => {
  * POST /user/otp-register
  * Register
  */
-exports.otpRegister = async (req, res) => {
+const otpRegistration = async (req, res) => {
   try {
     const otp = Number(req.body.otp);
-    const { code, createdAt, expiryLimit } = req.user.verificationCode;
+    const { code, createdAt } = req.user.verificationCode;
 
-    console.log(Date.now() - createdAt);
-
-    if (otp === code) {
+    if (otp === code && !isOtpExpire(createdAt)) {
       const user = await userModel.findById(req.user._id);
       user.isActive = true;
 
@@ -126,4 +185,23 @@ exports.otpRegister = async (req, res) => {
       })
     );
   }
+};
+
+/**
+ * POST /user/otp-resend
+ * resend otp
+ */
+const resendOtp = async (req, res) => {
+  console.log("send otp");
+  res.json({ data: "otp sent" });
+};
+
+export {
+  loginPage,
+  login,
+  logout,
+  registrationPage,
+  registration,
+  otpRegistration,
+  resendOtp,
 };

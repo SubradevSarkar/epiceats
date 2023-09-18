@@ -1,13 +1,14 @@
-require("dotenv").config();
-const express = require("express");
-const expressLayout = require("express-ejs-layouts");
-const errorHandler = require("./server/middleware/errorMiddleware");
-const connectDB = require("./server/config/dbconfig");
+import express from "express";
+import expressLayout from "express-ejs-layouts";
+import errorHandler from "./server/middleware/errorMiddleware.js";
+import connectDB from "./server/config/dbconfig.js";
 
-const session = require("express-session");
-const cookieParser = require("cookie-parser");
-const flash = require("connect-flash");
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import flash from "connect-flash";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -28,7 +29,7 @@ app.use(flash());
 app.set("layout", "./layouts/main");
 app.set("view engine", "ejs");
 
-const routes = require("./server/routes/index");
+import routes from "./server/routes/index.js";
 app.use("/", routes);
 
 app.use(errorHandler);

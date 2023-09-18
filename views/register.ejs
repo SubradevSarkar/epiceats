@@ -8,7 +8,7 @@
 <div class="row justify-content-center">
   <div class="col-9 log-form">
     <div
-      class="alert alert-danger"
+      class="alert alert-warning"
       id="reg-alert"
       style="display: none"
       role="alert"
@@ -25,11 +25,11 @@
     <form id="reg-form" action="/user/register" method="POST">
       <div class="row g-3">
         <div class="col-12">
-          <label for="username" class="form-label">Username</label>
+          <label for="userName" class="form-label">Username</label>
           <input
             type="text"
-            name="username"
-            id="reg-username"
+            name="userName"
+            id="reg-userName"
             required
             class="form-control"
           />
@@ -40,21 +40,21 @@
           </p>
         </div>
         <div class="col-12">
-          <label for="fname" class="form-label">First name</label>
+          <label for="firstName" class="form-label">First name</label>
           <input
             type="text"
-            name="fname"
-            id="reg-fname"
+            name="firstName"
+            id="reg-firstName"
             required
             class="form-control"
           />
         </div>
         <div class="col-12">
-          <label for="lname" class="form-label">Last name</label>
+          <label for="lastName" class="form-label">Last name</label>
           <input
             type="text"
-            name="lname"
-            id="reg-lname"
+            name="lastName"
+            id="reg-lastName"
             required
             class="form-control"
           />
@@ -77,10 +77,11 @@
             id="reg-password"
             required
             class="form-control"
+            minlength="6"
           />
           <p>
             <small style="font-size: 0.8rem; color: #757575"
-              >limit min:8 characters</small
+              >min limit 6 characters</small
             >
           </p>
         </div>
@@ -92,6 +93,7 @@
             id="reg-conPassword"
             required
             class="form-control"
+            minlength="6"
           />
         </div>
 
@@ -107,7 +109,7 @@
       </div>
     </form>
     <% } %> <% if(step ===2){ %>
-    <form id="reg-form" action="/user/otp-register" method="POST">
+    <form id="reg-otpform" action="/user/otp-register" method="POST">
       <div class="row g-3">
         <p>
           <b>Verify your Email</b><br /><br />Enter the one-time password sent
@@ -116,6 +118,16 @@
             style="color: rgb(78, 132, 248)"
             ><%- email %></span
           >
+        </p>
+        <p id="reg-otpbtn">
+          <b>
+            <u
+              >Resend
+              <span id="reg-otpcontent"
+                >in <span id="reg-otptime">45</span><span>s</span></span
+              ></u
+            >
+          </b>
         </p>
         <div class="col-12">
           <label for="otp" class="form-label">OTP</label>

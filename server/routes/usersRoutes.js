@@ -1,14 +1,20 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const userController = require("../controllers/userController");
-const protect = require("../middleware/authMiddleware");
+import * as userController from "../controllers/userController.js";
+import { authUser, hasAccess } from "../middleware/authMiddleware.js";
 
 // router.get("/", (req, res) => {});
 router.get("/login", userController.loginPage);
 router.post("/login", userController.login);
-router.get("/register", userController.registerPage);
-router.post("/register", userController.register);
-router.post("/otp-register", protect, userController.otpRegister);
-router.post("/logout", (req, res) => {});
+router.get("/register", userController.registrationPage);
+router.post("/register", userController.registration);
+router.post(
+  "/otp-register",
+  authUser,
+  hasAccess(["user"]),
+  userController.otpRegistration
+);
+router.post("/otp-resend", authUser, userController.resendOtp);
+router.post("/logout", authUser, hasAccess(["user"]), userController.logout);
 
-module.exports = router;
+export default router;

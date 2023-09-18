@@ -1,9 +1,11 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const upload = require("../config/uploadConfig");
+import { authUser, hasAccess } from "../middleware/authMiddleware.js";
 
-const recipeController = require("../controllers/recipeController");
+import upload from "../config/uploadConfig.js";
+
+import * as recipeController from "../controllers/recipeController.js";
 
 router.get("/", recipeController.homepage);
 router.get("/recipe/:id", recipeController.recipePage);
@@ -12,7 +14,12 @@ router.get("/categories/:id", recipeController.exploreCategory);
 router.get("/explore-latest", recipeController.exploreCategoryLatest);
 router.get("/about", recipeController.aboutPage);
 router.post("/search", recipeController.searchRecipes);
-router.get("/submit-recipe", recipeController.recipeSubmitPage);
+router.get(
+  "/submit-recipe",
+  authUser,
+  hasAccess(["user", "admin"]),
+  recipeController.recipeSubmitPage
+);
 router.post(
   "/submit-recipe",
   upload.single("image"),
@@ -20,6 +27,6 @@ router.post(
 );
 
 router.get("/contact-submit", recipeController.contactPage);
-router.post("/contact-submit", recipeController.contactSubmitPage);
+router.post("/contact-submit", recipeController.contactSubmit);
 
-module.exports = router;
+export default router;

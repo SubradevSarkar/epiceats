@@ -1,13 +1,13 @@
-const categoryModel = require("../models/CategoryModel");
-const recipeModel = require("../models/RecipeModel");
-const uploadImage = require("../config/firebaseConfig");
-const contactModel = require("../models/ContactModel");
+import categoryModel from "../models/CategoryModel.js";
+import recipeModel from "../models/RecipeModel.js";
+import uploadImage from "../config/firebaseConfig.js";
+import contactModel from "../models/ContactModel.js";
 
 /**
  * GET /
  * homepage
  */
-exports.homepage = async (req, res) => {
+const homepage = async (req, res) => {
   try {
     const categoryLimit = 5;
     const categories = await categoryModel.find({}).limit(categoryLimit);
@@ -33,7 +33,7 @@ exports.homepage = async (req, res) => {
  * GET /categories
  * Categories
  */
-exports.categoryPage = async (req, res) => {
+const categoryPage = async (req, res) => {
   try {
     const categoryLimit = 20;
     const categories = await categoryModel.find({}).limit(categoryLimit);
@@ -48,7 +48,7 @@ exports.categoryPage = async (req, res) => {
  * GET /categories/:id
  * Categories
  */
-exports.exploreCategory = async (req, res) => {
+const exploreCategory = async (req, res) => {
   try {
     const categoryId = req.params.id;
     const categoryLimit = 20;
@@ -70,7 +70,7 @@ exports.exploreCategory = async (req, res) => {
  * GET /recipe/:id
  * recipe
  */
-exports.recipePage = async (req, res) => {
+const recipePage = async (req, res) => {
   try {
     const recipeId = req.params.id;
     const recipe = await recipeModel.findById(recipeId);
@@ -85,7 +85,7 @@ exports.recipePage = async (req, res) => {
  * GET /about
  * recipe
  */
-exports.aboutPage = async (req, res) => {
+const aboutPage = async (req, res) => {
   try {
     res.render("about", { title: "epiceats - About" });
   } catch (error) {
@@ -97,7 +97,7 @@ exports.aboutPage = async (req, res) => {
  * GET /explore-latest
  * explore Latest Category
  */
-exports.exploreCategoryLatest = async (req, res) => {
+const exploreCategoryLatest = async (req, res) => {
   try {
     const recipeLimit = 20;
     const recipes = await recipeModel
@@ -117,7 +117,7 @@ exports.exploreCategoryLatest = async (req, res) => {
  * Post /search
  * searchRecipes
  */
-exports.searchRecipes = async (req, res) => {
+const searchRecipes = async (req, res) => {
   try {
     const searchContext = req.body.searchTerm;
     const recipes = await recipeModel.find({
@@ -134,7 +134,7 @@ exports.searchRecipes = async (req, res) => {
  * get /submit-recipe
  * submitRecipe
  */
-exports.recipeSubmitPage = async (req, res) => {
+const recipeSubmitPage = async (req, res) => {
   try {
     const infoSuccessMessage = req.flash("infoSuccess");
     const infoFailureMessage = req.flash("infoFailure");
@@ -152,7 +152,7 @@ exports.recipeSubmitPage = async (req, res) => {
  * Post /submit-recipe
  * submitRecipe
  */
-exports.submitRecipe = async (req, res) => {
+const submitRecipe = async (req, res) => {
   try {
     let imageUrl;
 
@@ -185,7 +185,7 @@ exports.submitRecipe = async (req, res) => {
  * get /contact-submit
  * contact page
  */
-exports.contactPage = async (req, res) => {
+const contactPage = async (req, res) => {
   try {
     const infoSuccessMessage = req.flash("infoSuccess");
     const infoFailureMessage = req.flash("infoFailure");
@@ -203,7 +203,7 @@ exports.contactPage = async (req, res) => {
  * Post /contact-submit
  * contact submit form
  */
-exports.contactSubmitPage = async (req, res) => {
+const contactSubmit = async (req, res) => {
   try {
     const body = req.body;
     const questionData = {
@@ -219,4 +219,18 @@ exports.contactSubmitPage = async (req, res) => {
     req.flash("infoFailure", error.message);
     throw new Error(error.message);
   }
+};
+
+export {
+  homepage,
+  categoryPage,
+  exploreCategory,
+  recipePage,
+  aboutPage,
+  exploreCategoryLatest,
+  searchRecipes,
+  recipeSubmitPage,
+  submitRecipe,
+  contactPage,
+  contactSubmit,
 };

@@ -41,6 +41,11 @@ a {
   max-width: 30rem;
 }
 
+#reg-otpbtn {
+  width: max-content;
+  cursor: text;
+}
+
 .smb-btn {
   color: #f8663a;
 }
