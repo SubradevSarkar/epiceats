@@ -1,0 +1,34 @@
+<div class="dropdown-center" id="profile-menu-lg">
+  <button
+    class="dropdown-toggle"
+    style="border: none !important; background-color: #00000000"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    <img src="/img/Chefhat1.svg" width="35" alt="Chef hat" />
+  </button>
+  <div
+    class="menu-item-box dropdown-menu dropdown-menu-end dropdown-menu-lg-start"
+  >
+    <div
+      class="d-flex flex-column px-3 align-items-center justify-content-center"
+    >
+      <img src="/img/Chefhat1.svg" width="80" alt="Chef hat" />
+      <a href="#" class="menu-profile-lg">Subradev sarkar</a>
+    </div>
+    <hr />
+    <form class="menu-item-lg">
+      <button type="submit" class="dropdown-item px-4">
+        <img src="/img/recipeicon.svg" alt="recipe" />
+        My recipe
+      </button>
+    </form>
+    <form class="menu-item-lg" action="/user/logout" method="POST">
+      <button type="submit" class="dropdown-item px-4">
+        <img src="/img/logouticon.svg" alt="logout" />
+        Log out
+      </button>
+    </form>
+  </div>
+</div>

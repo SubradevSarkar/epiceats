@@ -1,5 +1,7 @@
 :root {
   --bs-font-sans-serif: "Bricolage Grotesque", sans-serif;
+  --epic-color: #f8663a;
+  --epic-color-light: #fff0ec;
 }
 
 html {
@@ -25,20 +27,73 @@ a {
 .btn-res {
   --bs-btn-font-weight: 500;
   --bs-btn-color: #ffffff;
-  --bs-btn-bg: #f8663a;
-  --bs-btn-border-color: #f8663a;
+  --bs-btn-bg: var(--epic-color);
+  --bs-btn-border-color: var(--epic-color);
   --bs-btn-border-radius: 0.5rem;
   --bs-btn-hover-color: #ffffff;
   --bs-btn-hover-bg: #d84d23;
   --bs-btn-hover-border-color: #d84d23;
-  --bs-btn-focus-shadow-rgb: #f8663a;
+  --bs-btn-focus-shadow-rgb: var(--epic-color);
   --bs-btn-active-color: var(--bs-btn-hover-color);
-  --bs-btn-active-bg: #f8663a;
-  --bs-btn-active-border-color: #f8663a;
+  --bs-btn-active-bg: var(--epic-color);
+  --bs-btn-active-border-color: var(--epic-color);
+}
+
+.login-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid var(--epic-color);
+  border-radius: 50px;
+  padding: 3px 5px !important;
+  color: var(--epic-color) !important;
+  font-weight: 600;
+}
+
+.login-btn span {
+  margin: 5px;
+}
+.login-btn:hover {
+  background-color: var(--epic-color);
+  color: #ffffff !important;
 }
 
 .log-form {
   max-width: 30rem;
+}
+
+.dropdown-toggle::after {
+  border-top: 0;
+}
+.menu-item-box {
+  min-width: 240px !important;
+  box-shadow: 0 5px 10px 0 #0000001a;
+}
+
+.menu-profile-lg {
+  font-weight: 600;
+  text-align: center;
+}
+.menu-profile-lg:hover {
+  color: var(--epic-color);
+}
+/* .menu-item-lg {
+  display: flex;
+  justify-content: center;
+} */
+.menu-item-lg img {
+  margin-right: 8px;
+  width: 15px;
+}
+
+.menu-item-lg button:hover {
+  background-color: var(--epic-color-light) !important;
+  color: #000 !important;
+}
+.menu-item-lg button:active {
+  background-color: var(--epic-color-light) !important;
+  color: #000 !important;
 }
 
 #reg-otpbtn {

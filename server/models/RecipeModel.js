@@ -32,9 +32,10 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isApproved: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      enum: ["approved", "pending", "rejected", "review"],
+      default: "pending",
     },
     extraData: { type: mongoose.Schema.Types.Mixed },
   },

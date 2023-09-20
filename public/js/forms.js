@@ -94,14 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function resendOtp() {
-    const response = await fetch(`${url}/user/otp-resend`, {
+    await fetch(`${url}/user/otp-resend`, {
       method: "POST",
     });
-    const content = await response.json();
-    if (content) {
-      console.log(content);
-      otpCount();
-      console.log("first");
-    }
   }
 });

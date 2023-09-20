@@ -37,7 +37,9 @@
           <img src="/img/eplogo.svg" height="68" alt="eapiceats-logo" />
         </a>
 
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center md-md-0">
+        <ul
+          class="nav col-12 col-md-auto mb-2 justify-content-center align-items-center md-md-0"
+        >
           <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
           <li>
             <a href="/about" class="nav-link px-2 link-secondary">About</a>
@@ -52,9 +54,7 @@
               >Contact</a
             >
           </li>
-          <li>
-            <a href="/user/login" class="nav-link px-2 link-secondary">Login</a>
-          </li>
+          <%- include('../components/loginBtnComponent.ejs')%>
         </ul>
         <!-- <div class="col-md-3 text-end"> -->
         <div class="col-12 col-md-3 md-md-0 mb-2 text-end">
@@ -86,8 +86,8 @@
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
       crossorigin="anonymous"
     ></script>
-    <script src="/js/script.js"></script>
-    <script src="/js/forms.js"></script>
-    <script src="/js/validation.js"></script>
+    <script defer src="/js/script.js"></script>
+    <script defer src="/js/forms.js"></script>
+    <script defer src="/js/validation.js"></script>
   </body>
 </html>
