@@ -68,7 +68,7 @@ a {
 }
 .menu-item-box {
   min-width: 240px !important;
-  box-shadow: 0 5px 10px 0 #0000001a;
+  box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.08);
 }
 
 .menu-profile-lg {
@@ -102,12 +102,12 @@ a {
 }
 
 .smb-btn {
-  color: #f8663a;
+  color: var(--epic-color);
 }
 
 .smb-btn:hover {
   font-weight: 500;
-  color: #f8663a;
+  color: var(--epic-color);
 }
 
 /* category card */
