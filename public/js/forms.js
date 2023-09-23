@@ -1,6 +1,7 @@
+"use strict";
+
 // Wait for the DOM to be fully loaded before attaching event listeners
 document.addEventListener("DOMContentLoaded", () => {
-  const elementId = (id) => document.getElementById(id);
   let userNameField = elementId("reg-userName");
   let firstNameField = elementId("reg-firstName");
   let lastNameField = elementId("reg-lastName");
@@ -14,47 +15,53 @@ document.addEventListener("DOMContentLoaded", () => {
   let confirmPassword = "";
   let password = "";
 
-  const url = window.location.origin;
-  const query = window.location.search.split("=")[1];
-  if (query == 2) {
+  if (query.get("regstep") == 2) {
     otpCount();
   }
 
+  // handle Registration form submission event =================================================================
   let registerForm = elementId("reg-form");
-  registerForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // Prevent form submission if validation fails
-    if (validateForm()) {
-      registerForm.submit();
-    }
-  });
+  if (registerForm) {
+    registerForm.addEventListener("submit", (event) => {
+      event.preventDefault(); // Prevent form submission if validation fails
+      if (validateForm()) {
+        registerForm.submit();
+      }
+    });
+  }
 
-  confirmPasswordField.addEventListener("input", () => {
-    confirmPassword = confirmPasswordField.value;
-    password = passwordField.value;
+  // check password and confirm password match against =================================================================
+  if (confirmPasswordField) {
+    confirmPasswordField.addEventListener("input", () => {
+      confirmPassword = confirmPasswordField.value;
+      password = passwordField.value;
 
-    // Check if the passwords match
-    const passwordsMatch = confirmPassword === password;
+      // Check if the passwords match
+      const passwordsMatch = confirmPassword === password;
 
-    if (!passwordsMatch) {
-      confirmPasswordField.classList.add("border-error");
-    } else {
-      confirmPasswordField.classList.remove("border-error");
-    }
-  });
+      if (!passwordsMatch) {
+        confirmPasswordField.classList.add("border-error");
+      } else {
+        confirmPasswordField.classList.remove("border-error");
+      }
+    });
+  }
 
-  passwordField.addEventListener("input", () => {
-    // confirmPassword = confirmPasswordField.value;
-    password = passwordField.value;
+  if (passwordField) {
+    passwordField.addEventListener("input", () => {
+      // confirmPassword = confirmPasswordField.value;
+      password = passwordField.value;
 
-    // Check if the passwords match
-    const passwordsMatch = confirmPassword === password;
+      // Check if the passwords match
+      const passwordsMatch = confirmPassword === password;
 
-    if (!!confirmPassword && !passwordsMatch) {
-      confirmPasswordField.classList.add("border-error");
-    } else {
-      confirmPasswordField.classList.remove("border-error");
-    }
-  });
+      if (!!confirmPassword && !passwordsMatch) {
+        confirmPasswordField.classList.add("border-error");
+      } else {
+        confirmPasswordField.classList.remove("border-error");
+      }
+    });
+  }
 
   function validateForm() {
     const userData = {
@@ -94,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function resendOtp() {
-    await fetch(`${url}/user/otp-resend`, {
+    await fetch(`${baseUrl}/user/otp-resend`, {
       method: "POST",
     });
   }
