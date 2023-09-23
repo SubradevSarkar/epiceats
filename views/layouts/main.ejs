@@ -54,7 +54,7 @@
               >Contact</a
             >
           </li>
-          <%- include('../components/loginBtnComponent.ejs')%>
+          <%- include('../components/loginBtnComponent.ejs',{user})%>
         </ul>
         <!-- <div class="col-md-3 text-end"> -->
         <div class="col-12 col-md-3 md-md-0 mb-2 text-end">
@@ -86,8 +86,10 @@
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
       crossorigin="anonymous"
     ></script>
-    <script defer src="/js/script.js"></script>
+    <script defer src="/js/appScript.js"></script>
+    <script defer src="/js/auth.js"></script>
     <script defer src="/js/forms.js"></script>
     <script defer src="/js/validation.js"></script>
+    <script defer src="/js/domElements.js"></script>
   </body>
 </html>

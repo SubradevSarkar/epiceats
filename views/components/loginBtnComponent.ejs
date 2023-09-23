@@ -1,4 +1,5 @@
 <li class="login-list px-2">
+  <% if(!user){%>
   <a
     href="/user/login"
     id="login-btn-lg"
@@ -7,5 +8,5 @@
     <img src="/img/Chefhat1.svg" width="30" alt="Chef hat" />
     <span>Login</span>
   </a>
-  <%- include('./userMenuComponent.ejs') %>
+  <% }else{%> <%- include('./userMenuComponent.ejs') %> <% } %>
 </li>
