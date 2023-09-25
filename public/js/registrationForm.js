@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (registerForm) {
     registerForm.addEventListener("submit", (event) => {
       event.preventDefault(); // Prevent form submission if validation fails
-      if (validateForm()) {
+      if (isFormValid()) {
         registerForm.submit();
       }
     });
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function validateForm() {
+  function isFormValid() {
     const userData = {
       userName: userNameField.value,
       firstName: firstNameField.value,

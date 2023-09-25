@@ -7,15 +7,40 @@ const authUser = async (req, res, next) => {
     try {
       const decode = await verifyToken(token);
       req.user = await userModel.findById(decode.userId).select("-password");
-      next();
+      return next();
     } catch (error) {
       res.status(401);
       throw new Error("Not authorized, token not valid");
     }
   } else {
-    next();
     res.status(401);
+    return next();
     // throw new Error("Not authorized, No token");
+  }
+};
+
+const authCredentials = async (req, res, next) => {
+  let token = req.cookies.jwt;
+  let user = null;
+  if (token) {
+    try {
+      const decode = await verifyToken(token);
+      user = await userModel.findById(decode.userId).select("-password");
+      if (user.isRegistered) {
+        res.locals.user = user;
+      } else {
+        res.locals.user = null;
+      }
+      return next();
+    } catch (error) {
+      res.status(401);
+      res.locals.user = null;
+      return next();
+    }
+  } else {
+    res.status(401);
+    res.locals.user = null;
+    return next();
   }
 };
 
@@ -33,4 +58,21 @@ const hasAccess = ([...roles]) => {
   };
 };
 
-export { authUser, hasAccess };
+const isAllowed = (allow) => {
+  return function (req, res, next) {
+    allow = allow ? allow : true;
+    const isRegistered = !req?.user?.isActive && !req?.user?.isRegistered;
+
+    if (allow && !req.user) {
+      return next();
+    } else {
+      if (isRegistered) {
+        return next();
+      }
+
+      return res.redirect("/");
+    }
+  };
+};
+
+export { authUser, authCredentials, isAllowed, hasAccess };

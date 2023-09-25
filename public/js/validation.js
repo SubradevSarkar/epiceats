@@ -1,3 +1,5 @@
+"use strict";
+
 const validateRegistrationForm = (userData) => {
   // Regular expression to check for special characters in the username
   const usernamePattern = /^[a-zA-Z0-9]+$/;

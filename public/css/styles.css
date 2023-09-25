@@ -82,6 +82,36 @@ a {
   display: flex;
   justify-content: center;
 } */
+
+.myprofile {
+  max-width: 40rem !important;
+  padding: 2rem;
+  border: 1px solid #dfdde9;
+  border-radius: 8px;
+}
+
+.cs-pointer {
+  cursor: pointer;
+}
+
+.cs-not-allowed:disabled {
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
+  background-color: #000 !important;
+  opacity: 0.2 !important;
+}
+
+.fw-hover:hover {
+  font-weight: 500;
+}
+
+@media only screen and (max-width: 640px) {
+  .myprofile {
+    padding: 0rem 0.6rem;
+    border: none;
+  }
+}
+
 .menu-item-lg img {
   margin-right: 8px;
   width: 15px;

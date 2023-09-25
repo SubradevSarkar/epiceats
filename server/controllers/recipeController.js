@@ -23,7 +23,9 @@ const homepage = async (req, res) => {
     const thaiRecipes = await recipeModel.find({ category: "Thai" });
 
     const food = { latestRecipes, indianRecipes, thaiRecipes, americanRecipes };
-    res.render("index", { title: "epiceats - Home", categories, food });
+    res
+      .status(200)
+      .render("index", { title: "epiceats - Home", categories, food });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -38,7 +40,9 @@ const categoryPage = async (req, res) => {
     const categoryLimit = 20;
     const categories = await categoryModel.find({}).limit(categoryLimit);
 
-    res.render("categories", { title: "epiceats - Categories", categories });
+    res
+      .status(200)
+      .render("categories", { title: "epiceats - Categories", categories });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -56,7 +60,7 @@ const exploreCategory = async (req, res) => {
       .find({ category: categoryId })
       .limit(categoryLimit);
 
-    res.render("categories", {
+    res.status(200).render("categories", {
       title: `epiceats - ${categoryId}`,
       categoryId,
       category,
@@ -75,7 +79,7 @@ const recipePage = async (req, res) => {
     const recipeId = req.params.id;
     const recipe = await recipeModel.findById(recipeId);
 
-    res.render("recipe", { title: "epiceats - Recipe", recipe });
+    res.status(200).render("recipe", { title: "epiceats - Recipe", recipe });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -87,7 +91,7 @@ const recipePage = async (req, res) => {
  */
 const aboutPage = async (req, res) => {
   try {
-    res.render("about", { title: "epiceats - About" });
+    res.status(200).render("about", { title: "epiceats - About" });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -104,7 +108,7 @@ const exploreCategoryLatest = async (req, res) => {
       .find({})
       .sort({ _id: -1 })
       .limit(recipeLimit);
-    res.render("exploreLatest", {
+    res.status(200).render("exploreLatest", {
       title: "epiceats - Explore latest",
       recipes,
     });
@@ -124,7 +128,7 @@ const searchRecipes = async (req, res) => {
       $text: { $search: searchContext, $diacriticSensitive: true },
     });
 
-    res.render("search", { title: "epiceats - Search", recipes });
+    res.status(200).render("search", { title: "epiceats - Search", recipes });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -138,7 +142,7 @@ const recipeSubmitPage = async (req, res) => {
   try {
     const infoSuccessMessage = req.flash("infoSuccess");
     const infoFailureMessage = req.flash("infoFailure");
-    res.render("submitRecipe", {
+    res.status(200).render("submitRecipe", {
       title: "epiceats - Submit recipe",
       infoSuccessMessage,
       infoFailureMessage,
@@ -189,7 +193,7 @@ const contactPage = async (req, res) => {
   try {
     const infoSuccessMessage = req.flash("infoSuccess");
     const infoFailureMessage = req.flash("infoFailure");
-    res.render("contact", {
+    res.status(200).render("contact", {
       title: "epiceats - contact us",
       infoSuccessMessage,
       infoFailureMessage,

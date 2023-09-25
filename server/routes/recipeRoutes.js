@@ -16,7 +16,6 @@ router.get("/about", recipeController.aboutPage);
 router.post("/search", recipeController.searchRecipes);
 router.get(
   "/submit-recipe",
-  authUser,
   hasAccess(["user", "admin"]),
   recipeController.recipeSubmitPage
 );
