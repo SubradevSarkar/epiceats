@@ -46,6 +46,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isRegistered: { type: Boolean, default: false },
     isActive: { type: Boolean, default: false },
     isAdmin: {
       type: Boolean,
@@ -60,7 +61,5 @@ const userSchema = new mongoose.Schema(
 );
 
 const userModel = mongoose.model("user", userSchema);
-
-// userModel.createIndexes();
 
 export default userModel;
