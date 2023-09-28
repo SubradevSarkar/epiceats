@@ -8,7 +8,6 @@ const isOtpExpire = (date) => {
   const current = Date.now();
   const limit = process.env.OTP_EXPIRE_LIMIT * 1000;
   const diff = Math.abs(current - time);
-  console.log(time, current, diff, limit);
   if (diff <= limit) return false;
   return true;
 };

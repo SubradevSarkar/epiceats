@@ -4,32 +4,29 @@ import { generateToken, verifyToken } from "../utils/manageToken.js";
 import { encryptPassword, matchPassword } from "../utils/managePassword.js";
 import { genOtp, isOtpExpire } from "../utils/manageOtp.js";
 import { sendEmail } from "../utils/manageEmail.js";
+import asyncHandler from "../utils/asyncHandler.js";
 import userModel from "../models/UserModel.js";
 
 /**
  * GET /user/login
  * LoginPage
  */
-const loginPage = async (req, res) => {
-  try {
-    const infoSuccessMessage = req.flash("infoSuccess");
-    const infoFailureMessage = req.flash("infoFailure");
+const loginPage = asyncHandler(async (req, res, next) => {
+  const infoSuccessMessage = req.flash("infoSuccess");
+  const infoFailureMessage = req.flash("infoFailure");
 
-    res.status(200).render("login", {
-      title: "epiceats - Login",
-      infoSuccessMessage,
-      infoFailureMessage,
-    });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+  res.status(200).render("login", {
+    title: "epiceats - Login",
+    infoSuccessMessage,
+    infoFailureMessage,
+  });
+});
 
 /**
  * POST /user/login
  * Login
  */
-const login = async (req, res) => {
+const login = asyncHandler(async (req, res, next) => {
   try {
     const { userName, password } = req.body;
     const searchTerm = userName.includes("@")
@@ -42,7 +39,11 @@ const login = async (req, res) => {
     }
 
     const user = await userModel.findOne(searchTerm);
-    if (!user || !matchPassword(password, user.password)) {
+    if (!user) {
+      throw new Error("Invalid username or password");
+    }
+
+    if (!(await matchPassword(password, user.password))) {
       throw new Error("Invalid username or password");
     }
 
@@ -54,64 +55,60 @@ const login = async (req, res) => {
     res.redirect("/");
   } catch (error) {
     req.flash("infoFailure", error.message);
+    res.redirect("/user/login");
   }
-};
+});
 
 /**
  * POST /user/logout
  * Logout
  */
-const logout = async (req, res) => {
+const logout = asyncHandler(async (req, res, next) => {
   res.cookie("jwt", "", {
     httpOnly: true,
     expires: new Date(0),
   });
 
-  res.status(200).json("successfully logged out");
-  // res.redirect("/");
-};
+  res.status(200).redirect("/");
+});
 
 /**
  * GET /user/register
  * Register
  */
-const registrationPage = async (req, res) => {
-  try {
-    let step = req.query?.regstep;
-    let email = "";
-    step = !step ? 1 : Number(step);
+const registrationPage = asyncHandler(async (req, res) => {
+  let step = req.query?.regstep;
+  let email = "";
+  step = !step ? 1 : Number(step);
 
-    if (step === 2) {
-      let token = req.cookies?.jwt;
+  if (step === 2) {
+    let token = req.cookies?.jwt;
 
-      if (token) {
-        let decode = await verifyToken(token);
-        email = decode.email ? decode.email : "";
-      } else {
-        return res.redirect("/");
-      }
+    if (token) {
+      let decode = await verifyToken(token);
+      email = decode.email ? decode.email : "";
+    } else {
+      return res.redirect("/");
     }
-
-    const infoSuccessMessage = req.flash("infoSuccess");
-    const infoFailureMessage = req.flash("infoFailure");
-
-    res.status(200).render("register", {
-      title: "epiceats - Register",
-      step,
-      email,
-      infoFailureMessage,
-      infoSuccessMessage,
-    });
-  } catch (error) {
-    throw new Error(error.message);
   }
-};
+
+  const infoSuccessMessage = req.flash("infoSuccess");
+  const infoFailureMessage = req.flash("infoFailure");
+
+  res.status(200).render("register", {
+    title: "epiceats - Register",
+    step,
+    email,
+    infoFailureMessage,
+    infoSuccessMessage,
+  });
+});
 
 /**
  * POST /user/register
  * Register
  */
-const registration = async (req, res) => {
+const registration = asyncHandler(async (req, res, next) => {
   try {
     const userData = {
       userName: req.body.userName,
@@ -164,13 +161,13 @@ const registration = async (req, res) => {
     req.flash("infoFailure", error.message);
     res.redirect("/user/register");
   }
-};
+});
 
 /**
  * POST /user/otp-register
  * Register
  */
-const otpRegistration = async (req, res) => {
+const otpRegistration = asyncHandler(async (req, res, next) => {
   try {
     const otp = Number(req.body.otp);
     const { code, createdAt } = req.user.verificationCode;
@@ -194,43 +191,141 @@ const otpRegistration = async (req, res) => {
       })
     );
   }
-};
-
-/**
- * POST /user/otp-resend
- * resend otp
- */
-const resendOtp = async (req, res) => {
-  console.log(typeof req.body, req.body);
-  res.json(req.body);
-};
+});
 
 /**
  * GET /user/profile
  * user profile page
  */
-const profilePage = async (req, res) => {
+const profilePage = asyncHandler(async (req, res, next) => {
+  const userData = req.user;
+
+  const infoSuccessMessage = req.flash("infoSuccess");
+  const infoFailureMessage = req.flash("infoFailure");
+  res.status(200).render("myProfile", {
+    title: "epiceats - Profile",
+    userData,
+    infoSuccessMessage,
+    infoFailureMessage,
+  });
+});
+
+/**
+ * PATCH /user/profile-update
+ ** user profile update
+ */
+
+const profileUpdate = asyncHandler(async (req, res, next) => {
   try {
-    const userData = req.user;
-    res
-      .status(200)
-      .render("myProfile", { title: "epiceats - Profile", userData });
+    const body = req.body;
+    const user = await userModel.findById(req.user._id);
+    let state = null;
+    const { isValid, errorMessage } = validateForm(body);
+    if (!isValid) {
+      throw new Error(errorMessage);
+    }
+
+    if (body.userName) {
+      const isUserExists = await userModel.findOne(body).lean();
+      if (isUserExists && isUserExists._id !== user._id) {
+        throw new Error("UserName already in used");
+      } else {
+        user.userName = body.userName;
+        await user.save();
+        state = "Username";
+      }
+    }
+
+    if (body.firstName) {
+      user.firstName = body.firstName;
+      await user.save();
+      state = "Firstname";
+    }
+
+    if (body.lastName) {
+      user.lastName = body.lastName;
+      await user.save();
+      state = "Lastname";
+    }
+
+    // if (body.email) {
+    //   user.email = body.email;
+    //   await user.save();
+    //   state = "email";
+    // }
+    req.flash("infoSuccess", `${state} update successfully`);
+    res.status(200).json({ message: "user updated successfully" });
   } catch (error) {
+    req.flash("infoFailure", error.message);
     throw new Error(error.message);
   }
-};
+});
+
+/**
+ * POST /user/send-otp
+ * send or resend otp
+ */
+const sendOtp = asyncHandler(async (req, res, next) => {
+  const otp = genOtp();
+  const user = await userModel.findById(req.user._id);
+
+  user.verificationCode = {
+    code: otp,
+    createdAt: Date.now(),
+  };
+
+  await user.save();
+  // await sendEmail({
+  //   email: user.email,
+  //   username: `${user.firstName + " " + user.lastName}`,
+  //   otp: user.verificationCode.code,
+  //   topic: "regOtp",
+  // });
+  res.status(200).json({ message: "check mail for OTP" });
+});
 
 /**
  * POST /user/password-reset
  * user password reset
  */
-const passwordReset = async (req, res) => {
+const passwordReset = asyncHandler(async (req, res, next) => {
   try {
-    const userData = req.user;
+    const body = req.body;
+    const otp = Number(req.body.otp);
+    let user = null;
+
+    const { isValid, errorMessage } = validateForm(body);
+    if (!isValid) {
+      throw new Error(errorMessage);
+    }
+
+    if (req.user) {
+      user = await userModel.findById(req.user._id).lean();
+    } else {
+      user = await userModel.findOne({ email: body.email }).lean();
+    }
+
+    if (user && !user.isActive) {
+      throw new Error("User not allowed");
+    }
+
+    const { code, createdAt } = user.verificationCode;
+
+    if (otp === code && !isOtpExpire(createdAt)) {
+      user.password = await encryptPassword(body.password.trim());
+      await user.save();
+    } else {
+      res.status(400);
+      throw new Error("OTP not match");
+    }
+
+    req.flash("infoSuccess", `password update successfully`);
+    res.status(200).json({ message: "user updated successfully" });
   } catch (error) {
+    req.flash("infoFailure", error.message);
     throw new Error(error.message);
   }
-};
+});
 
 export {
   loginPage,
@@ -239,7 +334,8 @@ export {
   registrationPage,
   registration,
   otpRegistration,
-  resendOtp,
+  sendOtp,
   profilePage,
+  profileUpdate,
   passwordReset,
 };

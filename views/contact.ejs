@@ -12,13 +12,9 @@
 
 <div class="row justify-content-center">
   <div class="col-8">
-    <% if (infoSuccessMessage != '') {%>
-    <div class="alert alert-success" role="alert">
-      <%- infoSuccessMessage %>
-    </div>
-    <% } %> <% if (infoFailureMessage != '') {%>
-    <div class="alert alert-danger" role="alert"><%- infoFailureMessage %></div>
-    <% } %>
+    <%-
+    include('./components/alertComponent.ejs',{infoSuccessMessage,infoFailureMessage})
+    %>
     <form action="/contact-submit" method="POST">
       <div class="row g-3">
         <div class="col-12">

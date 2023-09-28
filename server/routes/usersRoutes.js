@@ -3,7 +3,6 @@ const router = express.Router();
 import * as userController from "../controllers/userController.js";
 import { hasAccess, isAllowed } from "../middleware/authMiddleware.js";
 
-// router.get("/", (req, res) => {});
 router.get("/login", isAllowed(), userController.loginPage);
 router.post("/login", isAllowed(), userController.login);
 router.get("/register", isAllowed(), userController.registrationPage);
@@ -13,13 +12,14 @@ router.post(
   hasAccess(["user"]),
   userController.otpRegistration
 );
-router.post("/otp-resend", userController.resendOtp);
+router.post("/send-otp", userController.sendOtp);
 router.post("/logout", userController.logout);
 router.get("/profile", hasAccess(["user"]), userController.profilePage);
-router.post(
-  "/password-reset",
+router.patch(
+  "/profile-update",
   hasAccess(["user"]),
-  userController.passwordReset
+  userController.profileUpdate
 );
+router.patch("/password-reset", userController.passwordReset);
 
 export default router;

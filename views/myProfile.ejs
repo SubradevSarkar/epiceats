@@ -1,0 +1,213 @@
+<h1 class="pd-4 mb-4">
+  <!-- Hi 👋<b><%-userData.firstName%> <%-userData.lastName %></b>, -->
+  Account information
+</h1>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-9 log-form myprofile">
+    <%-
+    include('./components/alertComponent.ejs',{infoSuccessMessage,infoFailureMessage})
+    %>
+    <!-- <form id="login-form"> -->
+    <div class="row g-3">
+      <div class="col-12">
+        <div>
+          <label for="userName" class="form-label" style="font-weight: 700"
+            >Username</label
+          >
+          <div
+            class="profile-info d-flex justify-content-between align-items-center"
+          >
+            <span style="opacity: 0.8"> <%-userData.userName %> </span>
+            <img
+              src="/img/edit.svg"
+              width="22"
+              alt="edit icon"
+              style="opacity: 0.5; cursor: pointer"
+              class="profile-edit-btn"
+            />
+          </div>
+          <%-
+          include('./components/profileEditForm.ejs',{data:userData.userName,name:'userName',type:'text'})
+          %>
+        </div>
+
+        <div class="mt-4">
+          <label for="firstName" class="form-label" style="font-weight: 700"
+            >First name</label
+          >
+          <div
+            class="profile-info d-flex justify-content-between align-items-center"
+          >
+            <span style="opacity: 0.8"> <%-userData.firstName %> </span>
+            <img
+              src="/img/edit.svg"
+              width="22"
+              alt="edit icon"
+              style="opacity: 0.5; cursor: pointer"
+              class="profile-edit-btn"
+            />
+          </div>
+          <%-
+          include('./components/profileEditForm.ejs',{data:userData.firstName,name:'firstName',type:'text'})
+          %>
+        </div>
+        <div class="mt-4">
+          <label for="lastName" class="form-label" style="font-weight: 700"
+            >Last name</label
+          >
+          <div
+            class="profile-info d-flex justify-content-between align-items-center"
+          >
+            <span style="opacity: 0.8"> <%-userData.lastName %> </span>
+            <img
+              src="/img/edit.svg"
+              width="22"
+              alt="edit icon"
+              style="opacity: 0.5; cursor: pointer"
+              class="profile-edit-btn"
+            />
+          </div>
+          <%-
+          include('./components/profileEditForm.ejs',{data:userData.lastName,name:'lastName',type:'text'})
+          %>
+        </div>
+        <div class="mt-4">
+          <label for="email" class="form-label" style="font-weight: 700"
+            >Email</label
+          >
+          <div class="d-flex justify-content-between align-items-center">
+            <span style="opacity: 0.8"> <%-userData.email %> </span>
+          </div>
+        </div>
+        <div class="mt-4">
+          <label for="password" class="form-label" style="font-weight: 700"
+            >Password</label
+          >
+          <div
+            class="profile-info d-flex flex-wrap justify-content-between align-items-center"
+          >
+            <input
+              type="text"
+              class="form-control"
+              placeholder="* * * * * * * * * *"
+              disabled
+              style="width: max-content !important"
+            />
+
+            <p
+              id="change-password-btn"
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+            >
+              change password
+            </p>
+          </div>
+          <div>
+            <form class="profile-form d-none" name="resetPasswordForm">
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="enter new password ..."
+                required
+                class="form-control"
+              />
+              <p>
+                <small style="font-size: 0.8rem; color: #757575"
+                  >min limit 6 characters</small
+                >
+              </p>
+              <div class="my-2">
+                <label for="confirmPassword">confirm password</label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="enter confirm password ..."
+                  required
+                  class="form-control"
+                />
+              </div>
+              <label for="otp">code</label>
+              <input
+                id="otp"
+                type="text"
+                name="otp"
+                placeholder="enter otp ..."
+                required
+                class="form-control"
+              />
+
+              <div class="d-flex py-2 justify-content-end align-items-center">
+                <button
+                  class="profile-edit-cancel-btn btn btn-outline-dark me-2 rounded-5"
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  disabled
+                  type="submit"
+                  class="cs-not-allowed profile-update-btn btn btn-dark rounded-5"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+            <div
+              id="change-password-con-box"
+              class="d-flex flex-column justify-content-center align-items-center text-bg-dark border rounded-4 d-none"
+              style="padding: 80px 0px"
+            >
+              <p>Are you sure?</p>
+              <p style="font-size: small; opacity: 0.7">
+                [ An OTP will be sent to your email for verification ]
+              </p>
+              <div class="d-flex justify-content-center align-items-center">
+                <button
+                  id="change-password-con-btn"
+                  class="profile-edit-btn btn btn-primary rounded-3 me-3 px-3"
+                  style="border: none; background-color: #ea663b"
+                >
+                  yes
+                </button>
+                <button
+                  id="change-password-con-cancel-btn"
+                  class="btn btn-danger rounded-3 px-3"
+                  style="background-color: #8c8c8c73; border: none"
+                >
+                  no
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-5" />
+        <div class="d-flex flex-column">
+          <!-- <span
+            id="profile-disable-btn"
+            class="fs-6 fw-hover cs-pointer text-danger d-flex justify-content-between"
+            style="width: max-content"
+            ><img
+              src="/img/removeUser.svg"
+              alt="logout"
+              width="15"
+              class="me-2"
+            />Disable account</span
+          > -->
+          <span
+            class="logoutBtn fw-hover mt-3 fs-6 d-flex cs-pointer justify-content-between"
+            style="width: max-content"
+            ><img
+              src="/img/logouticon.svg"
+              alt="logout"
+              width="13"
+              class="me-2"
+            />Logout</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

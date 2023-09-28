@@ -15,13 +15,9 @@
     >
       This is a danger alert—check it out!
     </div>
-    <% if (infoSuccessMessage != '') {%>
-    <div class="alert alert-success" role="alert">
-      <%- infoSuccessMessage %>
-    </div>
-    <% } %> <% if (infoFailureMessage != '') {%>
-    <div class="alert alert-danger" role="alert"><%- infoFailureMessage %></div>
-    <% } %> <% if(step ===1){ %>
+    <%-
+    include('./components/alertComponent.ejs',{infoSuccessMessage,infoFailureMessage})
+    %> <% if(step ===1){ %>
     <form id="reg-form" action="/user/register" method="POST">
       <div class="row g-3">
         <div class="col-12">

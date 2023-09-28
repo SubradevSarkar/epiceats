@@ -15,15 +15,15 @@
       class="d-flex flex-column px-3 align-items-center justify-content-center"
     >
       <img src="/img/Chefhat1.svg" width="80" alt="Chef hat" />
-      <a href="#" class="menu-profile-lg">Subradev sarkar</a>
+      <a href="/user/profile" class="menu-profile-lg"><%- user.userName %></a>
     </div>
     <hr />
-    <form class="menu-item-lg">
+    <a class="menu-item-lg">
       <button type="submit" class="dropdown-item px-4">
         <img src="/img/recipeicon.svg" alt="recipe" />
         My recipe
       </button>
-    </form>
+    </a>
     <form class="menu-item-lg" action="/user/logout" method="POST">
       <button type="submit" class="dropdown-item px-4">
         <img src="/img/logouticon.svg" alt="logout" />
