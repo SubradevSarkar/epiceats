@@ -40,6 +40,10 @@ const showToastMessage = async ({ message, type }) => {
   toastBody.innerText = message || toastBody.innerText;
   toast.show();
 };
+const preloader = document.getElementById("preloader");
+window.addEventListener("load", () => {
+  preloader.style.display = "none";
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   let ingredientList = selector(".ingredientList");
