@@ -34,7 +34,7 @@ const recipeSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["approved", "rejected", "review"],
+      enum: ["review", "recheck", "approved", "rejected"],
       default: "approved",
     },
     extraData: { type: mongoose.Schema.Types.Mixed },
