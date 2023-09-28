@@ -131,6 +131,10 @@ a {
 .menu-profile-lg {
   font-weight: 600;
   text-align: center;
+  width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .menu-profile-lg:hover {
   color: var(--epic-color);
