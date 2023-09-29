@@ -226,10 +226,13 @@ a {
 }
 
 .category_img--large {
-  height: 280px;
+  height: calc(100vw / 4);
+  min-height: 102px;
+  max-height: 280px;
 }
 
 .category_img img {
+  height: 100%;
   width: 100%;
   object-fit: cover;
 }

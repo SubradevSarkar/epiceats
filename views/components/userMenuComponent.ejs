@@ -18,17 +18,17 @@
       <a href="/user/profile" class="menu-profile-lg"><%- user.userName %></a>
     </div>
     <hr />
-    <a class="menu-item-lg">
+    <form action="/user/recipe" class="menu-item-lg">
       <button type="submit" class="dropdown-item px-4">
         <img src="/img/recipeicon.svg" alt="recipe" />
         My recipe
       </button>
-    </a>
-    <form class="menu-item-lg" action="/user/logout" method="POST">
+    </form>
+    <span class="menu-item-lg logoutBtn">
       <button type="submit" class="dropdown-item px-4">
         <img src="/img/logouticon.svg" alt="logout" />
         Log out
       </button>
-    </form>
+    </span>
   </div>
 </div>
