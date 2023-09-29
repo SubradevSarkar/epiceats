@@ -18,9 +18,12 @@
         <div class="col-12">
           <label for="email" class="form-label">Email</label>
           <input
+            readonly
             type="email"
             name="email"
             id="email"
+            value="<%- user?
+          user.email : ''%>"
             required
             class="form-control"
           />

@@ -1,14 +1,24 @@
 import userModel from "../models/UserModel.js";
 import { verifyToken } from "../utils/manageToken.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
-const authUser = async (req, res, next) => {
+const authUser = asyncHandler(async (req, res, next) => {
   let token = req.cookies.jwt;
   if (token) {
     try {
       const decode = await verifyToken(token);
-      req.user = await userModel.findById(decode.userId).select("-password");
-      return next();
+      const user = await userModel.findById(decode.userId).select("-password");
+      if (!user) {
+        throw new Error("User not found");
+      } else {
+        req.user = user;
+        return next();
+      }
     } catch (error) {
+      res.cookie("jwt", "", {
+        httpOnly: true,
+        expires: new Date(0),
+      });
       res.status(401);
       throw new Error("Not authorized, token not valid");
     }
@@ -17,9 +27,9 @@ const authUser = async (req, res, next) => {
     return next();
     // throw new Error("Not authorized, No token");
   }
-};
+});
 
-const authCredentials = async (req, res, next) => {
+const authCredentialsViewEngine = async (req, res, next) => {
   let token = req.cookies.jwt;
   let user = null;
   if (token) {
@@ -60,13 +70,13 @@ const hasAccess = ([...roles]) => {
 
 const isAllowed = (allow) => {
   return function (req, res, next) {
-    allow = allow ? allow : true;
-    const isRegistered = !req?.user?.isActive && !req?.user?.isRegistered;
+    allow = allow || true;
+    const isRegistered = req?.user?.isActive && req?.user?.isRegistered;
 
     if (allow && !req.user) {
       return next();
     } else {
-      if (isRegistered) {
+      if (!isRegistered) {
         return next();
       }
 
@@ -75,4 +85,4 @@ const isAllowed = (allow) => {
   };
 };
 
-export { authUser, authCredentials, isAllowed, hasAccess };
+export { authUser, authCredentialsViewEngine, isAllowed, hasAccess };

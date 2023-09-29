@@ -1,25 +1,42 @@
 import express from "express";
 const router = express.Router();
 import * as userController from "../controllers/userController.js";
-import { hasAccess, isAllowed } from "../middleware/authMiddleware.js";
+import {
+  authUser,
+  hasAccess,
+  isAllowed,
+} from "../middleware/authMiddleware.js";
 
-router.get("/login", isAllowed(), userController.loginPage);
-router.post("/login", isAllowed(), userController.login);
-router.get("/register", isAllowed(), userController.registrationPage);
-router.post("/register", isAllowed(), userController.registration);
+router.get("/login", authUser, isAllowed(), userController.loginPage);
+router.post("/login", authUser, isAllowed(), userController.login);
+router.get("/register", authUser, isAllowed(), userController.registrationPage);
+router.post("/register", authUser, isAllowed(), userController.registration);
 router.post(
   "/otp-register",
+  authUser,
   hasAccess(["user"]),
   userController.otpRegistration
 );
-router.post("/send-otp", userController.sendOtp);
+router.post("/send-otp", authUser, userController.sendOtp);
 router.post("/logout", userController.logout);
-router.get("/profile", hasAccess(["user"]), userController.profilePage);
+router.get(
+  "/profile",
+  authUser,
+  hasAccess(["user"]),
+  userController.userProfilePage
+);
 router.patch(
   "/profile-update",
+  authUser,
   hasAccess(["user"]),
-  userController.profileUpdate
+  userController.userProfileUpdate
 );
-router.patch("/password-reset", userController.passwordReset);
+router.patch("/password-reset", authUser, userController.passwordReset);
+router.get(
+  "/recipe",
+  authUser,
+  hasAccess(["user"]),
+  userController.userRecipePage
+);
 
 export default router;

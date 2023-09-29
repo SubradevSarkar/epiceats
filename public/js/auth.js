@@ -18,14 +18,18 @@ document.addEventListener("DOMContentLoaded", () => {
     "change-password-con-cancel-btn"
   );
 
-  const sendOtp = () => {
+  const sendOtp = (email) => {
+    const formData = new FormData(email);
+    const data = new URLSearchParams(formData);
+
     fetch(`${baseUrl}/user/send-otp`, {
       method: "POST",
+      body: data,
     })
       .then((res) => res.json())
       .then((data) => {
         showToastMessage({
-          message: "please check your email for OTP",
+          message: data.message,
           type: "warning",
         });
       })
@@ -63,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
   if (profileEditCancelBtn) {
     profileEditCancelBtn.forEach((button, index) => {
       button.addEventListener("click", () => {
@@ -163,6 +168,25 @@ document.addEventListener("DOMContentLoaded", () => {
     profilePasswordConCancelBtn.addEventListener("click", () => {
       profilePasswordConBox.classList.add("d-none");
       profilePasswordChangeBtn.parentElement.classList.remove("d-none");
+    });
+  }
+
+  if (logoutBtn_lg) {
+    logoutBtn_lg.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        fetch(`${baseUrl}/user/logout`, {
+          method: "POST",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.redirect) {
+              window.location.href = data.redirect;
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      });
     });
   }
 

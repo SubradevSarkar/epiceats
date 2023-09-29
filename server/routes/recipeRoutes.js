@@ -16,11 +16,14 @@ router.get("/about", recipeController.aboutPage);
 router.post("/search", recipeController.searchRecipes);
 router.get(
   "/submit-recipe",
+  authUser,
   hasAccess(["user", "admin"]),
   recipeController.recipeSubmitPage
 );
 router.post(
   "/submit-recipe",
+  authUser,
+  hasAccess(["user", "admin"]),
   upload.single("image"),
   recipeController.submitRecipe
 );

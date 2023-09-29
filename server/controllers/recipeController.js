@@ -2,163 +2,136 @@ import categoryModel from "../models/CategoryModel.js";
 import recipeModel from "../models/RecipeModel.js";
 import uploadImage from "../config/firebaseConfig.js";
 import contactModel from "../models/ContactModel.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
 /**
  * GET /
  * homepage
  */
-const homepage = async (req, res) => {
-  try {
-    const categoryLimit = 5;
-    const categories = await categoryModel.find({}).limit(categoryLimit);
-    const latestRecipes = await recipeModel
-      .find({})
-      .sort({ _id: -1 })
-      .limit(categoryLimit);
+const homepage = asyncHandler(async (req, res, next) => {
+  const categoryLimit = 5;
+  const categories = await categoryModel.find({}).limit(categoryLimit);
+  const latestRecipes = await recipeModel
+    .find({})
+    .sort({ _id: -1 })
+    .limit(categoryLimit);
 
-    const indianRecipes = await recipeModel.find({ category: "Indian" });
+  const indianRecipes = await recipeModel.find({ category: "Indian" });
 
-    const americanRecipes = await recipeModel.find({ category: "American" });
+  const americanRecipes = await recipeModel.find({ category: "American" });
 
-    const thaiRecipes = await recipeModel.find({ category: "Thai" });
+  const thaiRecipes = await recipeModel.find({ category: "Thai" });
 
-    const food = { latestRecipes, indianRecipes, thaiRecipes, americanRecipes };
-    res
-      .status(200)
-      .render("index", { title: "epiceats - Home", categories, food });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+  const food = { latestRecipes, indianRecipes, thaiRecipes, americanRecipes };
+  res
+    .status(200)
+    .render("index", { title: "epiceats - Home", categories, food });
+});
 
 /**
  * GET /categories
  * Categories
  */
-const categoryPage = async (req, res) => {
-  try {
-    const categoryLimit = 20;
-    const categories = await categoryModel.find({}).limit(categoryLimit);
+const categoryPage = asyncHandler(async (req, res, next) => {
+  const categoryLimit = 20;
+  const categories = await categoryModel.find({}).limit(categoryLimit);
 
-    res
-      .status(200)
-      .render("categories", { title: "epiceats - Categories", categories });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+  res
+    .status(200)
+    .render("categories", { title: "epiceats - Categories", categories });
+});
 
 /**
  * GET /categories/:id
  * Categories
  */
-const exploreCategory = async (req, res) => {
-  try {
-    const categoryId = req.params.id;
-    const categoryLimit = 20;
-    const category = await recipeModel
-      .find({ category: categoryId })
-      .limit(categoryLimit);
+const exploreCategory = asyncHandler(async (req, res, next) => {
+  const categoryId = req.params.id;
+  const categoryLimit = 20;
+  const category = await recipeModel
+    .find({ category: categoryId })
+    .limit(categoryLimit);
 
-    res.status(200).render("categories", {
-      title: `epiceats - ${categoryId}`,
-      categoryId,
-      category,
-    });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+  res.status(200).render("categories", {
+    title: `epiceats - ${categoryId}`,
+    categoryId,
+    category,
+  });
+});
 
 /**
  * GET /recipe/:id
  * recipe
  */
-const recipePage = async (req, res) => {
-  try {
-    const recipeId = req.params.id;
-    const recipe = await recipeModel.findById(recipeId);
+const recipePage = asyncHandler(async (req, res, next) => {
+  const recipeId = req.params.id;
+  const recipe = await recipeModel.findById(recipeId);
 
-    res.status(200).render("recipe", { title: "epiceats - Recipe", recipe });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+  res.status(200).render("recipe", { title: "epiceats - Recipe", recipe });
+});
 
 /**
  * GET /about
  * recipe
  */
-const aboutPage = async (req, res) => {
-  try {
-    res.status(200).render("about", { title: "epiceats - About" });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+const aboutPage = asyncHandler(async (req, res, next) => {
+  res.status(200).render("about", { title: "epiceats - About" });
+});
 
 /**
  * GET /explore-latest
  * explore Latest Category
  */
-const exploreCategoryLatest = async (req, res) => {
-  try {
-    const recipeLimit = 20;
-    const recipes = await recipeModel
-      .find({})
-      .sort({ _id: -1 })
-      .limit(recipeLimit);
-    res.status(200).render("exploreLatest", {
-      title: "epiceats - Explore latest",
-      recipes,
-    });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+const exploreCategoryLatest = asyncHandler(async (req, res, next) => {
+  const recipeLimit = 20;
+  const recipes = await recipeModel
+    .find({})
+    .sort({ _id: -1 })
+    .limit(recipeLimit);
+  res.status(200).render("exploreLatest", {
+    title: "epiceats - Explore latest",
+    recipes,
+  });
+});
 
 /**
  * Post /search
  * searchRecipes
  */
-const searchRecipes = async (req, res) => {
-  try {
-    const searchContext = req.body.searchTerm;
-    const recipes = await recipeModel.find({
-      $text: { $search: searchContext, $diacriticSensitive: true },
-    });
+const searchRecipes = asyncHandler(async (req, res, next) => {
+  const searchContext = req.body.searchTerm;
+  const recipes = await recipeModel.find({
+    $text: { $search: searchContext, $diacriticSensitive: true },
+  });
 
-    res.status(200).render("search", { title: "epiceats - Search", recipes });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+  res.status(200).render("search", { title: "epiceats - Search", recipes });
+});
 
 /**
  * get /submit-recipe
  * submitRecipe
  */
-const recipeSubmitPage = async (req, res) => {
-  try {
-    const infoSuccessMessage = req.flash("infoSuccess");
-    const infoFailureMessage = req.flash("infoFailure");
-    res.status(200).render("submitRecipe", {
-      title: "epiceats - Submit recipe",
-      infoSuccessMessage,
-      infoFailureMessage,
-    });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+const recipeSubmitPage = asyncHandler(async (req, res, next) => {
+  const infoSuccessMessage = req.flash("infoSuccess");
+  const infoFailureMessage = req.flash("infoFailure");
+  res.status(200).render("submitRecipe", {
+    title: "epiceats - Submit recipe",
+    infoSuccessMessage,
+    infoFailureMessage,
+  });
+});
 
 /**
  * Post /submit-recipe
  * submitRecipe
  */
-const submitRecipe = async (req, res) => {
+const submitRecipe = asyncHandler(async (req, res, next) => {
   try {
+    const body = req.body;
     let imageUrl;
+    if (body.email !== req.user.email) {
+      throw new Error("Please provide correct email address");
+    }
 
     if (!req.files || Object.keys(req.files).length === 0) {
       imageUrl = await uploadImage(req);
@@ -166,14 +139,14 @@ const submitRecipe = async (req, res) => {
       throw new Error("choose image to upload");
     }
 
-    const body = req.body;
     const recipeData = {
-      email: body.email,
+      email: body.email || req.user.email,
       name: body.name,
       description: body.description,
       ingredients: body.ingredients,
       category: body.category,
       image: imageUrl,
+      userId: req.user._id,
     };
 
     await recipeModel.create(recipeData);
@@ -183,13 +156,13 @@ const submitRecipe = async (req, res) => {
     req.flash("infoFailure", error.message);
     res.redirect("/submit-recipe");
   }
-};
+});
 
 /**
  * get /contact-submit
  * contact page
  */
-const contactPage = async (req, res) => {
+const contactPage = asyncHandler(async (req, res, next) => {
   try {
     const infoSuccessMessage = req.flash("infoSuccess");
     const infoFailureMessage = req.flash("infoFailure");
@@ -201,13 +174,13 @@ const contactPage = async (req, res) => {
   } catch (error) {
     throw new Error(error.message);
   }
-};
+});
 
 /**
  * Post /contact-submit
  * contact submit form
  */
-const contactSubmit = async (req, res) => {
+const contactSubmit = asyncHandler(async (req, res, next) => {
   try {
     const body = req.body;
     const questionData = {
@@ -223,7 +196,7 @@ const contactSubmit = async (req, res) => {
     req.flash("infoFailure", error.message);
     throw new Error(error.message);
   }
-};
+});
 
 export {
   homepage,

@@ -6,6 +6,7 @@ import { genOtp, isOtpExpire } from "../utils/manageOtp.js";
 import { sendEmail } from "../utils/manageEmail.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import userModel from "../models/UserModel.js";
+import recipeModel from "../models/RecipeModel.js";
 
 /**
  * GET /user/login
@@ -69,24 +70,23 @@ const logout = asyncHandler(async (req, res, next) => {
     expires: new Date(0),
   });
 
-  res.status(200).redirect("/");
+  res.status(200).json({ redirect: "/" });
 });
 
 /**
  * GET /user/register
  * Register
  */
-const registrationPage = asyncHandler(async (req, res) => {
+const registrationPage = asyncHandler(async (req, res, nest) => {
   let step = req.query?.regstep;
   let email = "";
   step = !step ? 1 : Number(step);
 
   if (step === 2) {
-    let token = req.cookies?.jwt;
+    let user = req?.user;
 
-    if (token) {
-      let decode = await verifyToken(token);
-      email = decode.email ? decode.email : "";
+    if (user) {
+      email = user.email ? user.email : "";
     } else {
       return res.redirect("/");
     }
@@ -197,7 +197,7 @@ const otpRegistration = asyncHandler(async (req, res, next) => {
  * GET /user/profile
  * user profile page
  */
-const profilePage = asyncHandler(async (req, res, next) => {
+const userProfilePage = asyncHandler(async (req, res, next) => {
   const userData = req.user;
 
   const infoSuccessMessage = req.flash("infoSuccess");
@@ -215,7 +215,7 @@ const profilePage = asyncHandler(async (req, res, next) => {
  ** user profile update
  */
 
-const profileUpdate = asyncHandler(async (req, res, next) => {
+const userProfileUpdate = asyncHandler(async (req, res, next) => {
   try {
     const body = req.body;
     const user = await userModel.findById(req.user._id);
@@ -266,8 +266,13 @@ const profileUpdate = asyncHandler(async (req, res, next) => {
  * send or resend otp
  */
 const sendOtp = asyncHandler(async (req, res, next) => {
+  let email = req?.user?.email || req?.body?.email;
   const otp = genOtp();
-  const user = await userModel.findById(req.user._id);
+  const user = await userModel.findOne({ email });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
 
   user.verificationCode = {
     code: otp,
@@ -281,7 +286,7 @@ const sendOtp = asyncHandler(async (req, res, next) => {
   //   otp: user.verificationCode.code,
   //   topic: "regOtp",
   // });
-  res.status(200).json({ message: "check mail for OTP" });
+  res.status(200).json({ message: "please check your email for OTP" });
 });
 
 /**
@@ -303,6 +308,10 @@ const passwordReset = asyncHandler(async (req, res, next) => {
       user = await userModel.findById(req.user._id).lean();
     } else {
       user = await userModel.findOne({ email: body.email }).lean();
+    }
+
+    if (!user) {
+      throw new Error("user not valid");
     }
 
     if (user && !user.isActive) {
@@ -327,6 +336,19 @@ const passwordReset = asyncHandler(async (req, res, next) => {
   }
 });
 
+/**
+ * GET /user/recipe
+ * user recipe
+ */
+const userRecipePage = asyncHandler(async (req, res, next) => {
+  const recipes = await recipeModel
+    .find({ userId: req.user._id })
+    .limit(20)
+    .lean();
+
+  res.render("myRecipe", { title: "epiceats - myrecipe", recipes });
+});
+
 export {
   loginPage,
   login,
@@ -335,7 +357,8 @@ export {
   registration,
   otpRegistration,
   sendOtp,
-  profilePage,
-  profileUpdate,
+  userProfilePage,
+  userProfileUpdate,
   passwordReset,
+  userRecipePage,
 };

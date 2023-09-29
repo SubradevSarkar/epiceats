@@ -32,6 +32,10 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isVisible: {
+      type: Boolean,
+      default: true,
+    },
     status: {
       type: String,
       enum: ["review", "recheck", "approved", "rejected"],

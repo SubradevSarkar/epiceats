@@ -2,7 +2,7 @@ import express from "express";
 import expressLayout from "express-ejs-layouts";
 import errorHandler from "./server/middleware/errorMiddleware.js";
 import connectDB from "./server/config/dbconfig.js";
-import { authCredentials } from "./server/middleware/authMiddleware.js";
+import { authCredentialsViewEngine } from "./server/middleware/authMiddleware.js";
 
 import session from "express-session";
 import cookieParser from "cookie-parser";
@@ -27,7 +27,7 @@ app.use(
   })
 );
 app.use(flash());
-app.use(authCredentials);
+app.use(authCredentialsViewEngine);
 
 app.set("layout", "./layouts/main");
 app.set("view engine", "ejs");
