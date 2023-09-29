@@ -1,4 +1,4 @@
-![Alt text](https://assets.digitalocean.com/articles/alligator/boo.svg "a title")
+![Alt text]([https://assets.digitalocean.com/articles/alligator/boo.svg](https://firebasestorage.googleapis.com/v0/b/epiceats-5cf87.appspot.com/o/logo%2Feplogo.svg?alt=media&token=3a942654-d7cc-46f7-8c92-b32ca46b8e45))
 
 # Epiceats - Your Culinary Adventure Begins Here
 
