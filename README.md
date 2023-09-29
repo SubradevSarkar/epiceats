@@ -1,3 +1,9 @@
+<p align="center">
+    <a href="https://epiceatsv1.onrender.com/" target="_blank">
+<img alt="epiceats logo" src="https://firebasestorage.googleapis.com/v0/b/epiceats-5cf87.appspot.com/o/logo%2Feplogo.svg?alt=media&token=3a942654-d7cc-46f7-8c92-b32ca46b8e45">
+    </a>
+</p>
+
 # Epiceats - Your Culinary Adventure Begins Here
 
 Welcome to **Epiceats**, your ultimate destination for culinary inspiration and gastronomic adventures. Whether you're a seasoned chef, a passionate home cook, or a foodie on a quest for delicious discoveries, Epiceats has something special in store for you.
