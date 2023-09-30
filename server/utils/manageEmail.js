@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { otpEmailTemplate } from "../utils/emailTemplate/index.js";
 
 const smtp = {
   gmail: {
@@ -26,22 +27,37 @@ const transport = nodemailer.createTransport(server);
 
 const senderEmail = `${process.env.OFFICIAL_EMAIL}`;
 
+const emailTopic = {
+  RegOtp: "regOtp",
+};
+
+const emailSubject = {
+  [emailTopic.RegOtp]: "Verify Your Identity with This OTP 🛡️",
+};
+
+const emailTemplate = (data, topic) => {
+  const template = {
+    [emailTopic.RegOtp]: () => otpEmailTemplate(data),
+  };
+  return template[topic]();
+};
+
 const sendEmail = async (data) => {
-  const { email, context } = data;
-  console.log(data);
+  const { email, topic } = data;
+  data.siteUrl = process.env.EPIC_SITE_URL;
+  data.logo = process.env.EPIC_EMAIL_LOGO;
   try {
     await transport.sendMail({
-      from: senderEmail, // sender address
+      from: `Epiceats <${senderEmail}>`, // sender address
       to: `${email}`, // list of receivers
-      subject: "Verify Your Identity with This OTP 🛡️", // Subject line
-      text: `${context}`, // plain text body
-      html: `<b>${context}</b>`, // html body
+      subject: emailSubject[topic], // Subject line
+      html: emailTemplate(data, topic), // html body
     });
     console.log("email sent");
   } catch (error) {
-    console.log("🔴 error sent");
+    console.log(":( email sent error");
     throw new Error(error.message);
   }
 };
 
-export { sendEmail };
+export { sendEmail, emailTopic };

@@ -3,7 +3,7 @@ import { validateForm } from "../utils/manageFormValidation.js";
 import { generateToken, verifyToken } from "../utils/manageToken.js";
 import { encryptPassword, matchPassword } from "../utils/managePassword.js";
 import { genOtp, isOtpExpire } from "../utils/manageOtp.js";
-import { sendEmail } from "../utils/manageEmail.js";
+import { sendEmail, emailTopic } from "../utils/manageEmail.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import userModel from "../models/UserModel.js";
 import recipeModel from "../models/RecipeModel.js";
@@ -280,12 +280,12 @@ const sendOtp = asyncHandler(async (req, res, next) => {
   };
 
   await user.save();
-  // await sendEmail({
-  //   email: user.email,
-  //   username: `${user.firstName + " " + user.lastName}`,
-  //   otp: user.verificationCode.code,
-  //   topic: "regOtp",
-  // });
+  await sendEmail({
+    email: user.email,
+    username: `${user.firstName + " " + user.lastName}`,
+    otp: user.verificationCode.code,
+    topic: emailTopic.RegOtp,
+  });
   res.status(200).json({ message: "please check your email for OTP" });
 });
 
