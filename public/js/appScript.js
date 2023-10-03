@@ -40,7 +40,7 @@ const showToastMessage = async ({ message, type }) => {
   toastBody.innerText = message || toastBody.innerText;
   toast.show();
 };
-const preloader = document.getElementById("preloader");
+const preloader = document.getElementById("preloader-container");
 window.addEventListener("load", () => {
   preloader.style.display = "none";
 });

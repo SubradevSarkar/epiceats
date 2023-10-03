@@ -1,6 +1,6 @@
 import express from "express";
 import expressLayout from "express-ejs-layouts";
-import errorHandler from "./server/middleware/errorMiddleware.js";
+import globalErrorHandler from "./server/middleware/errorMiddleware.js";
 import connectDB from "./server/config/dbconfig.js";
 import { authCredentialsViewEngine } from "./server/middleware/authMiddleware.js";
 
@@ -35,7 +35,7 @@ app.set("view engine", "ejs");
 import routes from "./server/routes/index.js";
 app.use("/", routes);
 
-app.use(errorHandler);
+app.use(globalErrorHandler);
 
 //Connect to the database before listening
 connectDB().then(() => {
