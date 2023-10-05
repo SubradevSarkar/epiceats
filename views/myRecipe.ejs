@@ -1,5 +1,10 @@
 <h1 class="pd-4 mb-4"><b> Welcome, <%-user.firstName%></b> 👋</h1>
 
+<div class="d-flex justify-content-center align-items-center">
+  <%-
+  include('./components/alertComponent.ejs',{infoSuccessMessage,infoFailureMessage})%>
+</div>
+
 <% if(typeof recipes !== 'undefined' && recipes.length>0) {%>
 
 <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">

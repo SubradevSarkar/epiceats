@@ -159,6 +159,32 @@ const submitRecipe = asyncHandler(async (req, res, next) => {
 });
 
 /**
+ * Delete /recipe-delete
+ * recipeDelete
+ */
+const recipeDelete = asyncHandler(async (req, res, next) => {
+  try {
+    const recipeId = req.params.recipeId;
+
+    const recipe = await recipeModel.findOne({
+      $and: [{ userId: req.user._id }, { _id: recipeId }],
+    });
+
+    if (!recipe) {
+      throw new Error("Recipe not found");
+    }
+
+    await recipeModel.findByIdAndDelete(recipeId);
+
+    req.flash("infoSuccess", "Recipe Deleted successfully");
+    res.status(200).json({ message: "Recipe Deleted successfully" });
+  } catch (error) {
+    req.flash("infoFailure", error.message);
+    throw new Error(error.message);
+  }
+});
+
+/**
  * get /contact-submit
  * contact page
  */
@@ -208,6 +234,7 @@ export {
   searchRecipes,
   recipeSubmitPage,
   submitRecipe,
+  recipeDelete,
   contactPage,
   contactSubmit,
 };

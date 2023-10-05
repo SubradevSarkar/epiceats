@@ -13,9 +13,14 @@
   <div class="col-12 col-md-4">
     <%- include('./components/recipeImageComponent.ejs',{recipe})%>
   </div>
-  <div class="col-12 col-md-8">
+  <div class="col-12 col-md-8" style="position: relative">
     <div class="row">
-      <div class="col-12"><h1><%- recipe.name %></h1></div>
+      <div class="col-12 d-flex justify-content-between align-items-start">
+        <h1><%- recipe.name %></h1>
+        <% if(`${user._id}` === `${recipe.userId}`){ %>
+        <%-include('./components/myRecipeEditMenuComponent.ejs',{recipe}) -%>
+        <%} %>
+      </div>
       <div class="col-12 mb-4">
         <i class="bi bi-tag"> <%- recipe.category %></i>
       </div>

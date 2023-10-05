@@ -346,12 +346,20 @@ const passwordReset = asyncHandler(async (req, res, next) => {
  * user recipe
  */
 const userRecipePage = asyncHandler(async (req, res, next) => {
+  const infoSuccessMessage = req.flash("infoSuccess");
+  const infoFailureMessage = req.flash("infoFailure");
+
   const recipes = await recipeModel
     .find({ userId: req.user._id })
     .limit(20)
     .lean();
 
-  res.render("myRecipe", { title: "epiceats - myrecipe", recipes });
+  res.render("myRecipe", {
+    title: "epiceats - myrecipe",
+    recipes,
+    infoSuccessMessage,
+    infoFailureMessage,
+  });
 });
 
 export {

@@ -28,6 +28,13 @@ router.post(
   recipeController.submitRecipe
 );
 
+router.delete(
+  "/recipe-delete/:recipeId",
+  authUser,
+  hasAccess(["user", "admin"]),
+  recipeController.recipeDelete
+);
+
 router.get("/contact-submit", recipeController.contactPage);
 router.post("/contact-submit", recipeController.contactSubmit);
 

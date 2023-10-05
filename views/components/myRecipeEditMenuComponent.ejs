@@ -1,0 +1,29 @@
+<div class="dropdown-center" id="recipe-menu-edit">
+  <button
+    class="dropdown-toggle"
+    style="border: none !important; background-color: #00000000"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    <img src="/img/menu.svg" width="30" alt="Chef hat" />
+  </button>
+  <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+    <!-- <form action="/recipe-edit" class="menu-item-lg">
+      <button type="submit" class="dropdown-item px-4">
+        <img src="/img/edit2.svg" alt="edit" />
+        Edit
+      </button>
+    </form> -->
+    <span
+      id="recipe-delete"
+      class="menu-item-lg"
+      data-recipe-Id="<%- recipe._id %>"
+    >
+      <button class="dropdown-item px-4" style="color: red">
+        <img src="/img/delete.svg" alt="delete" />
+        Delete
+      </button>
+    </span>
+  </div>
+</div>

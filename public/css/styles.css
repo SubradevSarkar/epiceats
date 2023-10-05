@@ -231,6 +231,12 @@ a {
   max-height: 280px;
 }
 
+@media only screen and (max-width: 991px) {
+  .category_img--large {
+    height: calc(100vw / 2);
+  }
+}
+
 .category_img img {
   height: 100%;
   width: 100%;

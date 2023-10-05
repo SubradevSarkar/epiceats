@@ -41,4 +41,34 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  //handel recipe delete =================================================================
+  const recipeMenuEdit = document.getElementById("recipe-menu-edit");
+  const recipeDelete = document.getElementById("recipe-delete");
+
+  if (recipeMenuEdit) {
+    recipeDelete.addEventListener("click", async (e) => {
+      const recipeId = recipeDelete.dataset.recipeId;
+      loader.show();
+      try {
+        const res = await fetch(`${baseUrl}/recipe-delete/${recipeId}`, {
+          method: "DELETE",
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message);
+        }
+
+        loader.hide();
+        redirect("/user/recipe");
+      } catch (error) {
+        loader.hide();
+        showToastMessage({
+          message: error.message,
+          type: "danger",
+        });
+      }
+    });
+  }
 });
