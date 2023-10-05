@@ -13,5 +13,17 @@
   include('./components/recipeListingComponent.ejs',{recipe})%> <%}) %> <% } %>
 </div>
 <% } else {%>
-<p>Item not found</p>
+<div class="d-flex flex-column justify-content-center align-items-center">
+  <img
+    class="img img-fluid mb-4"
+    style="opacity: 0.5"
+    src="/img/emptyBox.svg"
+    alt="empty box"
+    width="150"
+  />
+  <p>Recipes not found</p>
+  <a href="/submit-recipe" class="smb-btn-temp btn btn-lg py-10">
+    Submit recipe
+  </a>
+</div>
 <% } %>

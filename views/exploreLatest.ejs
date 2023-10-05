@@ -6,6 +6,4 @@
   recipes.forEach((recipe,index) => {%> <%-
   include('./components/recipeListingComponent.ejs',{recipe})%> <%}) %> <% } %>
 </div>
-<% } else {%>
-<p>Item not found</p>
-<% } %>
+<% } else {%> <%- include('./components/notFoundComponent.ejs')%> <% } %>

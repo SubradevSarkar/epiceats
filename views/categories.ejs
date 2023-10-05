@@ -39,12 +39,13 @@
   <%})%> <% } %>
 </div>
 
-<% if(typeof category !== 'undefined' && category.length>0) {%>
+<% if(typeof category !== 'undefined' ) {%><% if(typeof category !== 'undefined'
+&& category.length>0) {%>
 <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
   <% if(typeof category !== 'undefined' && category.length>0){ %> <%
   category.forEach((recipe,index) => {%> <%-
   include('./components/recipeListingComponent.ejs',{recipe})%> <%}) %> <% } %>
 </div>
-<% } else {%>
-<p>Item not found</p>
-<% } %>
+
+<% } else {%> <%- include('./components/notFoundComponent.ejs')%> <% } %> <% }
+%>

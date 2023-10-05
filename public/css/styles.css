@@ -207,6 +207,18 @@ a {
   color: var(--epic-color);
 }
 
+.smb-btn-temp {
+  text-decoration: none;
+  background-color: var(--epic-color);
+  color: white;
+}
+
+.smb-btn-temp:hover {
+  text-decoration: none;
+  background-color: #d8471b;
+  color: white;
+}
+
 /* category card */
 .category_link {
   text-align: center;
