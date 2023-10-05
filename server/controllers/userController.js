@@ -147,19 +147,15 @@ const registration = asyncHandler(async (req, res, next) => {
         topic: "regOtp",
       });
       req.flash("infoSuccess", "Check your email for OTP confirmation!");
-      res.redirect(
-        url.format({
-          pathname: "/user/register",
-          query: { regstep: 2 },
-        })
-      );
+
+      res.status(201).json({ redirect: "/user/register?regstep=2" });
     } else {
       res.status(400);
       throw new Error("Invalid User");
     }
   } catch (error) {
     req.flash("infoFailure", error.message);
-    res.redirect("/user/register");
+    throw new Error(error.message);
   }
 });
 
@@ -177,19 +173,14 @@ const otpRegistration = asyncHandler(async (req, res, next) => {
       user.isActive = true;
       user.isRegistered = true;
       await user.save();
-      res.redirect("/");
+      res.status(200).json({ redirect: "/" });
     } else {
       res.status(400);
       throw new Error("OTP not match");
     }
   } catch (error) {
     req.flash("infoFailure", error.message);
-    res.redirect(
-      url.format({
-        pathname: "/user/register",
-        query: { regstep: 2 },
-      })
-    );
+    throw new Error(error.message);
   }
 });
 
