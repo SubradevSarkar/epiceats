@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function otpCount() {
-    let limit = 10;
+    let limit = 45;
 
     let interval = setInterval(otpCountDown, 1000);
     function otpCountDown() {
