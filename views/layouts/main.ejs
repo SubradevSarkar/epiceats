@@ -25,9 +25,14 @@
     />
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/preloader.css" />
+    <link rel="stylesheet" href="/css/loader.css" />
   </head>
   <body>
-    <div id="preloader">
+    <%- include('../components/toastsComponent.ejs') %>
+    <div id="preloader-container">
+      <span class="preloader"></span>
+    </div>
+    <div id="loader-container" class="d-none">
       <span class="loader"></span>
     </div>
 
@@ -42,7 +47,9 @@
           <img src="/img/eplogo.svg" height="68" alt="eapiceats-logo" />
         </a>
 
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center md-md-0">
+        <ul
+          class="nav col-12 col-md-auto mb-2 justify-content-center align-items-center md-md-0"
+        >
           <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
           <li>
             <a href="/about" class="nav-link px-2 link-secondary">About</a>
@@ -57,9 +64,10 @@
               >Contact</a
             >
           </li>
+          <%- include('../components/loginBtnComponent.ejs',{user})%>
         </ul>
-
-        <div class="col-md-3 text-end">
+        <!-- <div class="col-md-3 text-end"> -->
+        <div class="col-12 col-md-3 md-md-0 mb-2 text-end">
           <form method="POST" action="/search">
             <input
               type="search"
@@ -89,5 +97,10 @@
       crossorigin="anonymous"
     ></script>
     <script defer src="/js/appScript.js"></script>
+    <script defer src="/js/auth.js"></script>
+    <script defer src="/js/registrationForm.js"></script>
+    <script defer src="/js/validation.js"></script>
+    <script defer src="/js/domElements.js"></script>
+    <script defer src="/js/recipeHandel.js"></script>
   </body>
 </html>

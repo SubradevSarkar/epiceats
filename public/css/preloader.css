@@ -1,16 +1,15 @@
-#preloader {
+#preloader-container {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #000;
-  /* background-image: url("../img/"); */
   height: 100vh;
   width: 100vw;
   position: fixed;
   z-index: 10000;
 }
 
-.loader {
+.preloader {
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -19,8 +18,8 @@
   position: relative;
   animation: flash 0.3s ease-in infinite alternate;
 }
-.loader::before,
-.loader::after {
+.preloader::before,
+.preloader::after {
   content: "";
   position: absolute;
   left: -64px;
@@ -34,7 +33,7 @@
   animation: hitL 0.3s ease-in infinite alternate;
 }
 
-.loader::after {
+.preloader::after {
   left: 64px;
   transform: rotate(-45deg);
   transform-origin: -35px -35px;

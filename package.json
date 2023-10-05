@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "food recipe blog",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
@@ -11,6 +12,7 @@
   "author": "subradevsarkar",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
@@ -19,8 +21,10 @@
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.3",
     "firebase": "^10.3.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^6.10.1",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.5"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

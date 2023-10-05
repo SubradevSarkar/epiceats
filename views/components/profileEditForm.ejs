@@ -1,0 +1,25 @@
+<form class="profile-form d-none">
+  <input
+    type="<%-type%>"
+    name="<%-name%>"
+    id="<%-name%>"
+    required
+    class="form-control"
+    value="<%- data %>"
+  />
+  <div class="d-flex py-2 justify-content-end align-items-center">
+    <button
+      class="profile-edit-cancel-btn btn btn-outline-dark me-2 rounded-5"
+      type="button"
+    >
+      Cancel
+    </button>
+    <button
+      disabled
+      type="submit"
+      class="cs-not-allowed profile-update-btn btn btn-dark rounded-5"
+    >
+      Save
+    </button>
+  </div>
+</form>

@@ -1,0 +1,29 @@
+<h1 class="pd-4 mb-4"><b> Welcome, <%-user.firstName%></b> 👋</h1>
+
+<div class="d-flex justify-content-center align-items-center">
+  <%-
+  include('./components/alertComponent.ejs',{infoSuccessMessage,infoFailureMessage})%>
+</div>
+
+<% if(typeof recipes !== 'undefined' && recipes.length>0) {%>
+
+<div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+  <% if(typeof recipes !== 'undefined' && recipes.length>0){ %> <%
+  recipes.forEach((recipe,index) => {%> <%-
+  include('./components/recipeListingComponent.ejs',{recipe})%> <%}) %> <% } %>
+</div>
+<% } else {%>
+<div class="d-flex flex-column justify-content-center align-items-center">
+  <img
+    class="img img-fluid mb-4"
+    style="opacity: 0.5"
+    src="/img/emptyBox.svg"
+    alt="empty box"
+    width="150"
+  />
+  <p>Recipes not found</p>
+  <a href="/submit-recipe" class="smb-btn-temp btn btn-lg py-10">
+    Submit recipe
+  </a>
+</div>
+<% } %>

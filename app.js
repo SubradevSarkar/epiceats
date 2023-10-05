@@ -1,20 +1,22 @@
-require("dotenv").config();
-const express = require("express");
-const expressLayout = require("express-ejs-layouts");
-const errorHandler = require("./server/middleware/errorMiddleware");
-const connectDB = require("./server/config/dbconfig");
+import express from "express";
+import expressLayout from "express-ejs-layouts";
+import globalErrorHandler from "./server/middleware/errorMiddleware.js";
+import connectDB from "./server/config/dbconfig.js";
+import { authCredentialsViewEngine } from "./server/middleware/authMiddleware.js";
 
-const session = require("express-session");
-const cookieParser = require("cookie-parser");
-const flash = require("connect-flash");
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import flash from "connect-flash";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static("public"));
 app.use(expressLayout);
-app.use(errorHandler);
 
 app.use(cookieParser("CookingBlogSecure"));
 app.use(
@@ -25,12 +27,15 @@ app.use(
   })
 );
 app.use(flash());
+app.use(authCredentialsViewEngine);
 
 app.set("layout", "./layouts/main");
 app.set("view engine", "ejs");
 
-const routes = require("./server/routes/recipeRoutes.js");
+import routes from "./server/routes/index.js";
 app.use("/", routes);
+
+app.use(globalErrorHandler);
 
 //Connect to the database before listening
 connectDB().then(() => {

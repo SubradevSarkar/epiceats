@@ -1,11 +1,10 @@
-const { initializeApp } = require("firebase/app");
-const {
+import { initializeApp } from "firebase/app";
+import {
   getStorage,
   ref,
   getDownloadURL,
   uploadBytesResumable,
-} = require("firebase/storage");
-const upload = require("./uploadConfig");
+} from "firebase/storage";
 
 const {
   FIREBASE_API_KEY,
@@ -14,6 +13,7 @@ const {
   FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID,
   FIREBASE_APP_ID,
+  FIREBASE_SECRET_TOKEN,
 } = process.env;
 
 const firebaseConfig = {
@@ -47,4 +47,4 @@ const uploadImage = async (req) => {
   return imageUrl;
 };
 
-module.exports = uploadImage;
+export default uploadImage;
