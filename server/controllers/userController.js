@@ -187,7 +187,7 @@ const otpRegistration = asyncHandler(async (req, res, next) => {
     res.redirect(
       url.format({
         pathname: "/user/register",
-        query: { step: 2 },
+        query: { regstep: 2 },
       })
     );
   }
