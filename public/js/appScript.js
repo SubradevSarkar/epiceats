@@ -44,3 +44,16 @@ const preloader = document.getElementById("preloader-container");
 window.addEventListener("load", () => {
   preloader.style.display = "none";
 });
+
+const loaderContainer = document.getElementById("loader-container");
+const body = document.body;
+const loader = {
+  show: () => {
+    loaderContainer.classList.remove("d-none");
+    body.classList.add("loader-active");
+  },
+  hide: () => {
+    loaderContainer.classList.add("d-none");
+    body.classList.remove("loader-active");
+  },
+};

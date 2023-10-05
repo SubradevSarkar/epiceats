@@ -13,6 +13,7 @@ const {
   FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID,
   FIREBASE_APP_ID,
+  FIREBASE_SECRET_TOKEN,
 } = process.env;
 
 const firebaseConfig = {

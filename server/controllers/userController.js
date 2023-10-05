@@ -140,12 +140,12 @@ const registration = asyncHandler(async (req, res, next) => {
     const user = await userModel.create(userData);
     if (user) {
       await generateToken(user, res);
-      // await sendEmail({
-      //   email: user.email,
-      //   username: `${user.firstName + " " + user.lastName}`,
-      //   otp: user.verificationCode.code,
-      //   topic: "regOtp",
-      // });
+      await sendEmail({
+        email: user.email,
+        username: `${user.firstName + " " + user.lastName}`,
+        otp: user.verificationCode.code,
+        topic: "regOtp",
+      });
       req.flash("infoSuccess", "Check your email for OTP confirmation!");
       res.redirect(
         url.format({
@@ -218,11 +218,15 @@ const userProfilePage = asyncHandler(async (req, res, next) => {
 const userProfileUpdate = asyncHandler(async (req, res, next) => {
   try {
     const body = req.body;
-    const user = await userModel.findById(req.user._id);
+
     let state = null;
     const { isValid, errorMessage } = validateForm(body);
     if (!isValid) {
       throw new Error(errorMessage);
+    }
+    const user = await userModel.findById(req.user._id);
+    if (!user) {
+      throw new Error("user not valid");
     }
 
     if (body.userName) {
@@ -248,6 +252,7 @@ const userProfileUpdate = asyncHandler(async (req, res, next) => {
       state = "Lastname";
     }
 
+    // update email address =================================================================
     // if (body.email) {
     //   user.email = body.email;
     //   await user.save();
@@ -284,7 +289,7 @@ const sendOtp = asyncHandler(async (req, res, next) => {
     email: user.email,
     username: `${user.firstName + " " + user.lastName}`,
     otp: user.verificationCode.code,
-    topic: emailTopic.RegOtp,
+    topic: emailTopic.otp,
   });
   res.status(200).json({ message: "please check your email for OTP" });
 });
@@ -305,9 +310,9 @@ const passwordReset = asyncHandler(async (req, res, next) => {
     }
 
     if (req.user) {
-      user = await userModel.findById(req.user._id).lean();
+      user = await userModel.findById(req.user._id);
     } else {
-      user = await userModel.findOne({ email: body.email }).lean();
+      user = await userModel.findOne({ email: body.email });
     }
 
     if (!user) {

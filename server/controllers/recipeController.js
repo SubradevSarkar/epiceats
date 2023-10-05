@@ -151,10 +151,10 @@ const submitRecipe = asyncHandler(async (req, res, next) => {
 
     await recipeModel.create(recipeData);
     req.flash("infoSuccess", "Recipe submitted successfully");
-    res.redirect("/submit-recipe");
+    res.status(200).json({ message: "Recipe submitted successfully" });
   } catch (error) {
     req.flash("infoFailure", error.message);
-    res.redirect("/submit-recipe");
+    throw new Error(error.message);
   }
 });
 

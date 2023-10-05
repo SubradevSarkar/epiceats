@@ -95,7 +95,7 @@ export default (data) => {
                                 <div style="padding-top:25px">
                                     <h2 style="font-weight: 500; font-size:25px;">Welcome to <span
                                             class="brandname">Epiceats!</span></h2>
-                                    <h6 style="font-size:14px;">Secure Your Account: OTP for Verification</h6>
+                                    <h6 style="font-size:14px;">we're excited to have you on board</h6>
                                     </di>
                             </td>
                         </tr>
@@ -103,7 +103,8 @@ export default (data) => {
                     <table width="100%">
                         <tr>
                             <td style="padding-top: 20px;">
-                                <p style="font-size:14px;font-weight: 500; color: #8b8b8b;">Your One-Time Password (OTP) for Account Verification. To proceed, please use the following OTP:</p>
+                                <p style="font-size:14px;font-weight: 500; color: #8b8b8b;">To complete your
+                                    registration, please use the following One-Time Password (OTP)</p>
 
                             </td>
                         </tr>
@@ -119,7 +120,7 @@ export default (data) => {
                                 <ul style="font-size: small;" class="info">
                                     <li>Your OTP is a security measure to protect your account.</li>
                                     <li>Please note that this OTP is valid for the next 5 minutes.</li>
-                                    <li>If you encounter any issues, you can request a new OTP.</li>
+                                    <li>If you encounter any issues, you can request a new OTP on the registration page.</li>
                                 </ul>
                             </td>
                         </tr>

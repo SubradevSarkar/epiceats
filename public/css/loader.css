@@ -20,6 +20,10 @@
   animation: rotation 1s linear infinite;
 }
 
+body.loader-active {
+  overflow: hidden;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

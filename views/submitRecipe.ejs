@@ -13,7 +13,7 @@
     <%-
     include('./components/alertComponent.ejs',{infoSuccessMessage,infoFailureMessage})
     %>
-    <form action="/submit-recipe" enctype="multipart/form-data" method="POST">
+    <form id="recipe-submit-form">
       <div class="row g-3">
         <div class="col-12">
           <label for="email" class="form-label">Email</label>
@@ -97,6 +97,7 @@
         <div class="col-12">
           <label for="image">Product Image</label>
           <input
+            id="recipe-image"
             type="file"
             class="form-control"
             name="image"

@@ -1,5 +1,8 @@
 import nodemailer from "nodemailer";
-import { otpEmailTemplate } from "../utils/emailTemplate/index.js";
+import {
+  otpEmailTemplate,
+  regOtpEmailTemplate,
+} from "../utils/emailTemplate/index.js";
 
 const smtp = {
   gmail: {
@@ -29,15 +32,18 @@ const senderEmail = `${process.env.OFFICIAL_EMAIL}`;
 
 const emailTopic = {
   RegOtp: "regOtp",
+  otp: "otp",
 };
 
 const emailSubject = {
   [emailTopic.RegOtp]: "Verify Your Identity with This OTP 🛡️",
+  [emailTopic.otp]: "Your One-Time Password (OTP) for Account Verification",
 };
 
 const emailTemplate = (data, topic) => {
   const template = {
-    [emailTopic.RegOtp]: () => otpEmailTemplate(data),
+    [emailTopic.RegOtp]: () => regOtpEmailTemplate(data),
+    [emailTopic.otp]: () => otpEmailTemplate(data),
   };
   return template[topic]();
 };

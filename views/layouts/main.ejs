@@ -25,11 +25,15 @@
     />
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/preloader.css" />
+    <link rel="stylesheet" href="/css/loader.css" />
   </head>
   <body>
     <%- include('../components/toastsComponent.ejs') %>
     <div id="preloader-container">
       <span class="preloader"></span>
+    </div>
+    <div id="loader-container" class="d-none">
+      <span class="loader"></span>
     </div>
 
     <div class="container-xxl px-md-5 bg-white">
@@ -97,5 +101,6 @@
     <script defer src="/js/registrationForm.js"></script>
     <script defer src="/js/validation.js"></script>
     <script defer src="/js/domElements.js"></script>
+    <script defer type="module" src="/js/recipeSubmition.js"></script>
   </body>
 </html>

@@ -158,27 +158,32 @@
             <div
               id="change-password-con-box"
               class="d-flex flex-column justify-content-center align-items-center text-bg-dark border rounded-4 d-none"
-              style="padding: 80px 0px"
+              style="padding: 80px 0px; position: relative"
             >
-              <p>Are you sure?</p>
-              <p style="font-size: small; opacity: 0.7">
-                [ An OTP will be sent to your email for verification ]
-              </p>
-              <div class="d-flex justify-content-center align-items-center">
-                <button
-                  id="change-password-con-btn"
-                  class="profile-edit-btn btn btn-primary rounded-3 me-3 px-3"
-                  style="border: none; background-color: #ea663b"
-                >
-                  yes
-                </button>
-                <button
-                  id="change-password-con-cancel-btn"
-                  class="btn btn-danger rounded-3 px-3"
-                  style="background-color: #8c8c8c73; border: none"
-                >
-                  no
-                </button>
+              <div class="d-none" style="position: absolute">
+                <span class="loader"></span>
+              </div>
+              <div class="text-center">
+                <p>Are you sure?</p>
+                <p style="font-size: small; font-weight: 200; opacity: 0.7">
+                  An OTP will be sent to your email for verification
+                </p>
+                <div class="d-flex justify-content-center align-items-center">
+                  <button
+                    id="change-password-con-btn"
+                    class="profile-edit-btn btn btn-primary rounded-3 me-3 px-3"
+                    style="border: none; background-color: #ea663b"
+                  >
+                    yes
+                  </button>
+                  <button
+                    id="change-password-con-cancel-btn"
+                    class="btn btn-danger rounded-3 px-3"
+                    style="background-color: #8c8c8c73; border: none"
+                  >
+                    no
+                  </button>
+                </div>
               </div>
             </div>
           </div>

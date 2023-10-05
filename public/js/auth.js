@@ -18,26 +18,78 @@ document.addEventListener("DOMContentLoaded", () => {
     "change-password-con-cancel-btn"
   );
 
-  const sendOtp = (email) => {
+  const sendOtp = async (email) => {
     const formData = new FormData(email);
     const data = new URLSearchParams(formData);
 
-    fetch(`${baseUrl}/user/send-otp`, {
-      method: "POST",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        showToastMessage({
-          message: data.message,
-          type: "warning",
-        });
-      })
-      .catch((err) => {
-        console.log(err.message);
+    try {
+      const res = await fetch(`${baseUrl}/user/send-otp`, {
+        method: "POST",
+        body: data,
       });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+
+      return await res.json();
+    } catch (error) {
+      throw new Error(error.message);
+    }
+
+    // fetch  then/catch() sample =================================================
+
+    // fetch(`${baseUrl}/user/send-otp`, {
+    //   method: "POST",
+    //   body: data,
+    // })
+    //   .then((res) => {
+    //     if (!res.ok) {
+    //       return res.json().then((errData) => {
+    //         console.log(errData);
+    //         throw new Error(errData.message);
+    //       });
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     showToastMessage({
+    //       message: data.message,
+    //       type: "warning",
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(111, err);
+    //   });
   };
 
+  const updateProfile = async (form) => {
+    const formData = new FormData(form);
+    const data = JSON.stringify(Object.fromEntries(formData));
+    // const data = new URLSearchParams(formData);
+
+    let apiEndpoint =
+      form.name === "resetPasswordForm" ? "password-reset" : "profile-update";
+
+    try {
+      const res = await fetch(`${baseUrl}/user/${apiEndpoint}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          // "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: data,
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
   if (profileEditBtn) {
     profileEditBtn.forEach((button, index) => {
       button.addEventListener("click", (e) => {
@@ -58,12 +110,33 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (button.id === "change-password-con-btn") {
-          sendOtp();
-        }
+          const loader = profilePasswordConBox.querySelectorAll("div")[0];
+          loader.classList.remove("d-none");
+          profilePasswordConBox.style.opacity = ".2";
+          sendOtp()
+            .then((res) => {
+              loader.classList.add("d-none");
+              profilePasswordConBox.style.opacity = "1";
+              profilePasswordConBox.classList.add("d-none");
+              profileForm[index].classList.remove("d-none");
 
-        profilePasswordConBox.classList.add("d-none");
-        profileInfo[index].classList.add("d-none");
-        profileForm[index].classList.remove("d-none");
+              showToastMessage({
+                message: res.message,
+                type: "warning",
+              });
+            })
+            .catch((error) => {
+              loader.classList.add("d-none");
+              profilePasswordConBox.style.opacity = "1";
+              showToastMessage({
+                message: error.message,
+                type: "danger",
+              });
+            });
+        } else {
+          profileInfo[index].classList.add("d-none");
+          profileForm[index].classList.remove("d-none");
+        }
       });
     });
   }
@@ -126,31 +199,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const saveButton = profileUpdateBtn[formIndex];
 
         if (!saveButton.disabled) {
-          const formData = new FormData(form);
-          const data = JSON.stringify(Object.fromEntries(formData));
-          // const data = new URLSearchParams(formData);
-
           // form.submit();
-
-          let apiEndpoint =
-            form.name === "resetPasswordForm"
-              ? "password-reset"
-              : "profile-update";
-
-          fetch(`${baseUrl}/user/${apiEndpoint}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              // "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: data,
-          })
-            .then((res) => res.json())
+          loader.show();
+          updateProfile(form)
             .then(() => {
-              redirect("/user/profile");
+              loader.hide();
+              location.reload();
             })
-            .catch(() => {
-              redirect("/user/profile");
+            .catch((err) => {
+              loader.hide();
+              window.location.reload();
             });
         }
       });
