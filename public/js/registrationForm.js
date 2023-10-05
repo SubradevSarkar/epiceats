@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function resendOtp() {
-    await fetch(`${baseUrl}/user/otp-resend`, {
+    await fetch(`${baseUrl}/user/send-otp`, {
       method: "POST",
     });
   }
