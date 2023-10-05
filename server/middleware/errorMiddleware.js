@@ -8,8 +8,6 @@ const errorHandler = (err, req, res, next) => {
     message = "Resource not found";
   }
 
-  console.log(errorHandler.stack);
-
   res.status(statusCode).json({
     status,
     message,

@@ -15,6 +15,12 @@ footer {
   max-width: 1530px;
 }
 
+.lead-hero {
+  font-size: 1rem;
+  background-color: #00000087;
+  border-radius: 9px;
+  padding: 15px;
+}
 .hero {
   margin: 0;
   min-height: 525px;
@@ -197,7 +203,7 @@ a {
 }
 
 .smb-btn:hover {
-  font-weight: 500;
+  background-color: #f8663a34;
   color: var(--epic-color);
 }
 
