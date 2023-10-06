@@ -3,9 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- for Microsoft apps -->
+    <meta
+      name="msapptication—TiteImage"
+      content="https://firebasestorage.googleapis.com/v0/b/epiceats-5cf87.appspot.com/o/thumbnail%2Fthumbnail.jpg?alt=media&token=99a78ae5-3073-4dc9-9eff-4e9bbe8fba6d"
+    />
+
+    <!-- for Facebook & Whatsapp -->
+    <!-- Site Name, Title, and Description to be displayed -->
+    <meta property="og:site_name" content="Epiceats" />
+    <meta property="og:title" content="Spice Up Your Palate with Epiceats" />
+    <meta
+      property="og:description"
+      content="Welcome to EpicEats, where the art of cooking meets the joy of discovery."
+    />
+
+    <!-- Image to display -->
+    <meta
+      property="og:image"
+      itemprop="image"
+      content="https://firebasestorage.googleapis.com/v0/b/epiceats-5cf87.appspot.com/o/thumbnail%2Fthumbnail.jpg?alt=media&token=99a78ae5-3073-4dc9-9eff-4e9bbe8fba6d"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image:type" content="image/png" />
+
+    <!-- Any size up to 3øØ. Anything above 3ØØpx will not work in WhatsApp -->
+    <meta property="og:image:width" content="300" />
+    <meta property="og:image:height" content="300" />
+
+    <!-- Website to visit when clicked in Facebook or WhatsApp -->
+    <meta property="og:url" content="https://epiceatsv1.onrender.com/" />
+
     <title>
       <%= typeof title != 'undefined'?title:'Cooking Blog - Made' %>
     </title>
+    <meta
+      name="description"
+      content=" Epiceats was born from a shared passion for gastronomy and a desire to
+    bring people closer to the joy of cooking and sharing exceptional meals.
+    Founded by a team of food enthusiasts, our blog is a labor of love
+    dedicated to the art of cooking, creativity, and a dash of spice."
+    />
+    <meta name="keywords" content="food," />
+    <meta name="author" content="subradev sarkar" />
     <link rel="icon" type="image/x-icon" href="/img/favicon.svg" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
