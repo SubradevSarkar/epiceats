@@ -4,6 +4,7 @@ import {
   ref,
   getDownloadURL,
   uploadBytesResumable,
+  deleteObject,
 } from "firebase/storage";
 
 const {
@@ -30,21 +31,38 @@ initializeApp(firebaseConfig);
 const storage = getStorage();
 
 const uploadImage = async (req) => {
-  const storageRef = ref(storage, `${Date.now()}${req.file.originalname}`);
+  try {
+    const storageRef = ref(
+      storage,
+      `recipe_image/${Date.now()}${req.file.originalname}`
+    );
 
-  const metadata = {
-    contentType: req.file.mimetype,
-  };
+    const metadata = {
+      contentType: req.file.mimetype,
+    };
 
-  const snapshot = await uploadBytesResumable(
-    storageRef,
-    req.file.buffer,
-    metadata
-  );
+    const snapshot = await uploadBytesResumable(
+      storageRef,
+      req.file.buffer,
+      metadata
+    );
 
-  const imageUrl = await getDownloadURL(snapshot.ref);
+    const imageUrl = await getDownloadURL(snapshot.ref);
 
-  return imageUrl;
+    return imageUrl;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
-export default uploadImage;
+const removeImage = async (imageUrl) => {
+  try {
+    const storageRef = ref(storage, `${imageUrl}`);
+    await deleteObject(storageRef);
+    return;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export { uploadImage, removeImage };

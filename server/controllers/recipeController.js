@@ -1,6 +1,6 @@
 import categoryModel from "../models/CategoryModel.js";
 import recipeModel from "../models/RecipeModel.js";
-import uploadImage from "../config/firebaseConfig.js";
+import { uploadImage, removeImage } from "../config/firebaseConfig.js";
 import contactModel from "../models/ContactModel.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
@@ -175,7 +175,7 @@ const recipeDelete = asyncHandler(async (req, res, next) => {
     }
 
     await recipeModel.findByIdAndDelete(recipeId);
-
+    await removeImage(recipe.image);
     req.flash("infoSuccess", "Recipe Deleted successfully");
     res.status(200).json({ message: "Recipe Deleted successfully" });
   } catch (error) {
