@@ -342,6 +342,7 @@ const userRecipePage = asyncHandler(async (req, res, next) => {
 
   const recipes = await recipeModel
     .find({ userId: req.user._id })
+    .sort({ _id: -1 })
     .limit(20)
     .lean();
 

@@ -40,6 +40,10 @@ app.use(globalErrorHandler);
 //Connect to the database before listening
 connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log("listening for requests");
+    console.log(
+      `listening for requests ${
+        process.env.NODE_ENV !== "production" ? PORT : ""
+      }`
+    );
   });
 });
